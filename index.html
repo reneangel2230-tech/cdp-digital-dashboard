@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDP Digital — Proyectos y Estado</title>
+<style>
+  :root{
+    --bg-1:#0f0c29;
+    --bg-2:#302b63;
+    --bg-3:#24243e;
+    --purple:#7f77dd;
+    --teal:#1d9e75;
+    --coral:#d85a30;
+    --amber:#ef9f27;
+    --card-bg:rgba(255,255,255,0.06);
+    --card-border:rgba(255,255,255,0.12);
+    --text-1:#f5f4fb;
+    --text-2:#b9b6d6;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(135deg,var(--bg-1),var(--bg-2) 60%,var(--bg-3));
+    color:var(--text-1);
+    min-height:100vh;
+    padding:48px 24px 80px;
+  }
+  .wrap{max-width:960px; margin:0 auto;}
+  header{margin-bottom:40px;}
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--text-2);
+    background:rgba(127,119,221,0.18);
+    border:1px solid rgba(127,119,221,0.4);
+    padding:4px 12px;
+    border-radius:999px;
+    margin-bottom:16px;
+  }
+  h1{font-size:34px; font-weight:600; margin-bottom:8px;}
+  .subtitle{color:var(--text-2); font-size:15px;}
+  .metrics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:16px;
+    margin:32px 0 48px;
+  }
+  .metric{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:16px;
+    padding:20px;
+    backdrop-filter:blur(6px);
+  }
+  .metric .num{font-size:32px; font-weight:700; background:linear-gradient(90deg,var(--purple),var(--teal)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .metric .label{font-size:13px; color:var(--text-2); margin-top:4px;}
+  .section-title{font-size:18px; font-weight:600; margin-bottom:20px; color:var(--text-1);}
+  .cards{display:flex; flex-direction:column; gap:20px;}
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:20px;
+    padding:28px;
+    backdrop-filter:blur(6px);
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .card:hover{transform:translateY(-2px); border-color:rgba(127,119,221,0.5);}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;}
+  .card-title{font-size:19px; font-weight:600; margin-bottom:4px;}
+  .card-client{font-size:13px; color:var(--text-2);}
+  .badge{
+    font-size:12px;
+    font-weight:600;
+    padding:5px 14px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .badge.progress{background:rgba(239,159,39,0.18); color:var(--amber); border:1px solid rgba(239,159,39,0.4);}
+  .badge.active{background:rgba(29,158,117,0.18); color:#4fd8ac; border:1px solid rgba(29,158,117,0.4);}
+  .bar-track{
+    width:100%;
+    height:8px;
+    background:rgba(255,255,255,0.1);
+    border-radius:999px;
+    margin:18px 0 8px;
+    overflow:hidden;
+  }
+  .bar-fill{
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--purple),var(--teal));
+  }
+  .bar-label{font-size:12px; color:var(--text-2); margin-bottom:16px;}
+  .next-step{
+    font-size:14px;
+    color:var(--text-1);
+    background:rgba(255,255,255,0.04);
+    border-left:3px solid var(--purple);
+    padding:12px 16px;
+    border-radius:8px;
+  }
+  .next-step strong{color:var(--text-2); font-weight:600; display:block; font-size:11px; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;}
+  footer{
+    margin-top:56px;
+    text-align:center;
+    color:var(--text-2);
+    font-size:12px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">CDP Digital</span>
+      <h1>Proyectos y estado</h1>
+      <p class="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 3 de julio de 2026</p>
+    </header>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="num">2</div>
+        <div class="label">Proyectos activos</div>
+      </div>
+      <div class="metric">
+        <div class="num">2</div>
+        <div class="label">En proceso de cotización</div>
+      </div>
+      <div class="metric">
+        <div class="num">2</div>
+        <div class="label">Clientes involucrados</div>
+      </div>
+    </div>
+
+    <div class="section-title">Oportunidades en curso</div>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Cambio de flota de impresión</div>
+            <div class="card-client">Cliente: Tzanetatos</div>
+          </div>
+          <span class="badge progress">Cotización en proceso</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:35%"></div></div>
+        <div class="bar-label">Avance estimado: 35%</div>
+        <div class="next-step">
+          <strong>Próximo paso</strong>
+          Dar seguimiento a la cotización de proveedor (alternativas nube y on-premise) y consolidar propuesta para pasar a comercial.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">GavaTracking</div>
+            <div class="card-client">Cliente: Super Baru</div>
+          </div>
+          <span class="badge active">Cotización solicitada</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
+        <div class="bar-label">Avance estimado: 50%</div>
+        <div class="next-step">
+          <strong>Próximo paso</strong>
+          Elaborar y enviar propuesta actualizada con brochure al cliente tras la presentación realizada.
+        </div>
+      </div>
+
+    </div>
+
+    <footer>CDP Digital · Dashboard interno de seguimiento de proyectos</footer>
+  </div>
+</body>
+</html>
