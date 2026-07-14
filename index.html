@@ -134,6 +134,29 @@
     color:var(--text-2);
     font-size:12px;
   }
+  .section-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px;}
+  .section-row .section-title{margin-bottom:0;}
+  .wa-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:600;
+    color:#0d0221;
+    background:linear-gradient(90deg,var(--teal),var(--cyan));
+    border:none;
+    padding:10px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .wa-btn:hover{transform:translateY(-1px);}
+  .wa-btn:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+  .wa-btn svg{width:16px; height:16px; fill:#0d0221;}
+  .wa-status{font-size:12px; margin-top:10px; min-height:16px;}
+  .wa-status.ok{color:var(--teal);}
+  .wa-status.err{color:var(--magenta);}
+  .wa-config-link{font-size:11px; color:var(--text-2); text-decoration:underline; cursor:pointer; background:none; border:none; padding:0;}
 </style>
 </head>
 <body>
@@ -154,94 +177,151 @@
       <div>
         <span class="eyebrow">CDP Digital</span>
         <h1>Proyectos y estado</h1>
-        <p class="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 14 de julio de 2026</p>
+        <p class="subtitle" id="subtitle">Resumen ejecutivo de oportunidades en curso — cargando...</p>
       </div>
     </header>
 
-    <div class="metrics">
-      <div class="metric">
-        <div class="num">3</div>
-        <div class="label">Proyectos activos</div>
-      </div>
-      <div class="metric">
-        <div class="num">2</div>
-        <div class="label">En proceso de cotización</div>
-      </div>
-      <div class="metric">
-        <div class="num">3</div>
-        <div class="label">Clientes involucrados</div>
+    <div class="metrics" id="metrics"></div>
+
+    <div class="section-row">
+      <div class="section-title">Oportunidades en curso</div>
+      <div>
+        <button class="wa-btn" id="waSendBtn" title="Enviar el resumen de avances a los grupos de WhatsApp configurados">
+          <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.87 9.87 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.06h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.14.83.84-3.06-.2-.31a8.19 8.19 0 0 1-1.26-4.28c0-4.53 3.69-8.22 8.24-8.22 2.2 0 4.27.86 5.83 2.42a8.16 8.16 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.22 8.23z"/></svg>
+          Enviar actualización a WhatsApp
+        </button>
+        <div style="text-align:right; margin-top:6px;">
+          <button class="wa-config-link" id="waConfigLink">Configurar conexión</button>
+        </div>
       </div>
     </div>
-
-    <div class="section-title">Oportunidades en curso</div>
-    <div class="cards">
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-heading">
-            <div class="icon-badge">
-              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-2M6 14h.01M6 18h12v3H6z"/></svg>
-            </div>
-            <div>
-              <div class="card-title">Cambio de flota de impresión</div>
-              <div class="card-client">Cliente: Tzanetatos</div>
-            </div>
-          </div>
-          <span class="badge progress">Cotización recibida</span>
-        </div>
-        <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
-        <div class="bar-label">Avance estimado: 60%</div>
-        <div class="next-step">
-          <strong>Próximo paso</strong>
-          Cotización de Grupo GAV recibida (nube y on-premise, 36 y 48 meses). Consolidar propuesta y enviarla a Cinthia Caballero para avanzar a comercial.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-heading">
-            <div class="icon-badge teal">
-              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            </div>
-            <div>
-              <div class="card-title">GavaTracking</div>
-              <div class="card-client">Cliente: Super Baru</div>
-            </div>
-          </div>
-          <span class="badge active">Propuesta en revisión</span>
-        </div>
-        <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
-        <div class="bar-label">Avance estimado: 60%</div>
-        <div class="next-step">
-          <strong>Próximo paso</strong>
-          Propuesta interna elaborada (pago de contado, Licencia + Servicio Cloud) tras reunión de revisión de políticas y funcionalidades. Enviar propuesta actualizada con brochure al cliente.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-heading">
-            <div class="icon-badge">
-              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6M9 17h6M9 9h2"/></svg>
-            </div>
-            <div>
-              <div class="card-title">Convenio Marco — Arrendamiento de Impresoras</div>
-              <div class="card-client">Cliente: Sector Público (Licitación)</div>
-            </div>
-          </div>
-          <span class="badge progress">En evaluación</span>
-        </div>
-        <div class="bar-track"><div class="bar-fill" style="width:55%"></div></div>
-        <div class="bar-label">Avance estimado: 55%</div>
-        <div class="next-step">
-          <strong>Próximo paso</strong>
-          Dar seguimiento al resultado de la evaluación/adjudicación de la licitación.
-        </div>
-      </div>
-
-    </div>
+    <div class="wa-status" id="waStatus"></div>
+    <div class="cards" id="cards"></div>
 
     <footer>CDP Digital · Dashboard interno de seguimiento de proyectos · Rene Becerra, Arquitecto de Soluciones MPS & ECM</footer>
   </div>
+
+  <script>
+    const ICONS = {
+      printer: '<path stroke-linecap="round" stroke-linejoin="round" d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-2M6 14h.01M6 18h12v3H6z"/>',
+      location: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+      document: '<path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6M9 17h6M9 9h2"/>',
+    };
+
+    function badgeClass(statusType){
+      return statusType === 'active' ? 'active' : 'progress';
+    }
+
+    function iconBadgeClass(icon){
+      return icon === 'location' ? 'icon-badge teal' : 'icon-badge';
+    }
+
+    function formatDate(isoDate){
+      const [year, month, day] = isoDate.split('-');
+      const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      return `${parseInt(day,10)} de ${meses[parseInt(month,10)-1]} de ${year}`;
+    }
+
+    async function loadDashboard(){
+      const res = await fetch('data/projects.json', { cache: 'no-store' });
+      const data = await res.json();
+
+      document.getElementById('subtitle').textContent =
+        `Resumen ejecutivo de oportunidades en curso — actualizado el ${formatDate(data.updatedAt)}`;
+
+      document.getElementById('metrics').innerHTML = `
+        <div class="metric"><div class="num">${data.metrics.proyectosActivos}</div><div class="label">Proyectos activos</div></div>
+        <div class="metric"><div class="num">${data.metrics.enCotizacion}</div><div class="label">En proceso de cotización</div></div>
+        <div class="metric"><div class="num">${data.metrics.clientesInvolucrados}</div><div class="label">Clientes involucrados</div></div>
+      `;
+
+      document.getElementById('cards').innerHTML = data.projects.map((p) => `
+        <div class="card">
+          <div class="card-top">
+            <div class="card-heading">
+              <div class="${iconBadgeClass(p.icon)}">
+                <svg viewBox="0 0 24 24">${ICONS[p.icon] || ICONS.document}</svg>
+              </div>
+              <div>
+                <div class="card-title">${p.title}</div>
+                <div class="card-client">Cliente: ${p.client}</div>
+              </div>
+            </div>
+            <span class="badge ${badgeClass(p.statusType)}">${p.status}</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:${p.progress}%"></div></div>
+          <div class="bar-label">Avance estimado: ${p.progress}%</div>
+          <div class="next-step">
+            <strong>Próximo paso</strong>
+            ${p.nextStep}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    loadDashboard().catch((err) => {
+      document.getElementById('subtitle').textContent = 'No se pudieron cargar los datos de proyectos.';
+      console.error(err);
+    });
+
+    // --- Integración con WhatsApp ---
+    const waStatusEl = document.getElementById('waStatus');
+    const waSendBtn = document.getElementById('waSendBtn');
+
+    function getWaConfig(){
+      return {
+        backendUrl: localStorage.getItem('cdp_wa_backend_url') || '',
+        apiKey: localStorage.getItem('cdp_wa_api_key') || '',
+      };
+    }
+
+    function setWaConfig(){
+      const current = getWaConfig();
+      const backendUrl = prompt('URL del backend de WhatsApp (ej: https://tu-backend.onrender.com):', current.backendUrl);
+      if (backendUrl === null) return;
+      const apiKey = prompt('API key configurada en el backend (SEND_API_KEY):', current.apiKey);
+      if (apiKey === null) return;
+      localStorage.setItem('cdp_wa_backend_url', backendUrl.trim().replace(/\/$/, ''));
+      localStorage.setItem('cdp_wa_api_key', apiKey.trim());
+    }
+
+    document.getElementById('waConfigLink').addEventListener('click', setWaConfig);
+
+    waSendBtn.addEventListener('click', async () => {
+      const { backendUrl, apiKey } = getWaConfig();
+      if (!backendUrl || !apiKey) {
+        setWaConfig();
+        return;
+      }
+
+      waSendBtn.disabled = true;
+      waStatusEl.className = 'wa-status';
+      waStatusEl.textContent = 'Enviando actualización a los grupos de WhatsApp...';
+
+      try {
+        const res = await fetch(`${backendUrl}/send-update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+          body: '{}',
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+
+        const failed = data.results.filter((r) => !r.ok);
+        if (failed.length) {
+          waStatusEl.className = 'wa-status err';
+          waStatusEl.textContent = `Enviado con errores en ${failed.length} grupo(s): ${failed.map((f) => f.error).join(', ')}`;
+        } else {
+          waStatusEl.className = 'wa-status ok';
+          waStatusEl.textContent = `Actualización enviada a ${data.results.length} grupo(s) correctamente.`;
+        }
+      } catch (err) {
+        waStatusEl.className = 'wa-status err';
+        waStatusEl.textContent = `No se pudo enviar: ${err.message}`;
+      } finally {
+        waSendBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
