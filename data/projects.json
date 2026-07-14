@@ -1,0 +1,37 @@
+{
+  "updatedAt": "2026-07-14",
+  "metrics": {
+    "proyectosActivos": 3,
+    "enCotizacion": 2,
+    "clientesInvolucrados": 3
+  },
+  "projects": [
+    {
+      "title": "Cambio de flota de impresión",
+      "client": "Tzanetatos",
+      "status": "Cotización recibida",
+      "statusType": "progress",
+      "progress": 60,
+      "icon": "printer",
+      "nextStep": "Cotización de Grupo GAV recibida (nube y on-premise, 36 y 48 meses). Consolidar propuesta y enviarla a Cinthia Caballero para avanzar a comercial."
+    },
+    {
+      "title": "GavaTracking",
+      "client": "Super Baru",
+      "status": "Propuesta en revisión",
+      "statusType": "active",
+      "progress": 60,
+      "icon": "location",
+      "nextStep": "Propuesta interna elaborada (pago de contado, Licencia + Servicio Cloud) tras reunión de revisión de políticas y funcionalidades. Enviar propuesta actualizada con brochure al cliente."
+    },
+    {
+      "title": "Convenio Marco — Arrendamiento de Impresoras",
+      "client": "Sector Público (Licitación)",
+      "status": "En evaluación",
+      "statusType": "progress",
+      "progress": 55,
+      "icon": "document",
+      "nextStep": "Dar seguimiento al resultado de la evaluación/adjudicación de la licitación."
+    }
+  ]
+}
