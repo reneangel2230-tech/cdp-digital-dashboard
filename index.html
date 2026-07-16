@@ -93,6 +93,7 @@
     background:linear-gradient(135deg,var(--magenta),var(--purple));
   }
   .icon-badge.teal{background:linear-gradient(135deg,var(--teal),var(--cyan));}
+  .icon-badge.green{background:linear-gradient(135deg,#22c55e,var(--teal));}
   .icon-badge svg{width:24px; height:24px; stroke:#ffffff; fill:none; stroke-width:2;}
   .card-title{font-size:19px; font-weight:600; margin-bottom:4px;}
   .card-client{font-size:13px; color:var(--text-2);}
@@ -105,6 +106,7 @@
   }
   .badge.progress{background:rgba(255,176,32,0.18); color:var(--amber); border:1px solid rgba(255,176,32,0.4);}
   .badge.active{background:rgba(29,233,182,0.18); color:var(--teal); border:1px solid rgba(29,233,182,0.4);}
+  .badge.won{background:rgba(34,197,94,0.18); color:#22c55e; border:1px solid rgba(34,197,94,0.4);}
   .bar-track{
     width:100%;
     height:8px;
@@ -154,21 +156,21 @@
       <div>
         <span class="eyebrow">CDP Digital</span>
         <h1>Proyectos y estado</h1>
-        <p class="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 14 de julio de 2026</p>
+        <p class="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 16 de julio de 2026</p>
       </div>
     </header>
 
     <div class="metrics">
       <div class="metric">
-        <div class="num">3</div>
+        <div class="num">6</div>
         <div class="label">Proyectos activos</div>
       </div>
       <div class="metric">
-        <div class="num">2</div>
+        <div class="num">4</div>
         <div class="label">En proceso de cotización</div>
       </div>
       <div class="metric">
-        <div class="num">3</div>
+        <div class="num">6</div>
         <div class="label">Clientes involucrados</div>
       </div>
     </div>
@@ -187,13 +189,13 @@
               <div class="card-client">Cliente: Tzanetatos</div>
             </div>
           </div>
-          <span class="badge progress">Cotización recibida</span>
+          <span class="badge progress">Cotización en proceso</span>
         </div>
-        <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
-        <div class="bar-label">Avance estimado: 60%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:55%"></div></div>
+        <div class="bar-label">Avance estimado: 55%</div>
         <div class="next-step">
           <strong>Próximo paso</strong>
-          Cotización de Grupo GAV recibida (nube y on-premise, 36 y 48 meses). Consolidar propuesta y enviarla a Cinthia Caballero para avanzar a comercial.
+          Revisar la cotización recibida del proveedor (opciones nube y on-premise) y consolidar la propuesta para pasar a comercial.
         </div>
       </div>
 
@@ -208,13 +210,13 @@
               <div class="card-client">Cliente: Super Baru</div>
             </div>
           </div>
-          <span class="badge active">Propuesta en revisión</span>
+          <span class="badge active">Cotización elaborada</span>
         </div>
         <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
         <div class="bar-label">Avance estimado: 60%</div>
         <div class="next-step">
           <strong>Próximo paso</strong>
-          Propuesta interna elaborada (pago de contado, Licencia + Servicio Cloud) tras reunión de revisión de políticas y funcionalidades. Enviar propuesta actualizada con brochure al cliente.
+          Gestionar internamente el envío de la cotización y el brochure ya elaborados al cliente.
         </div>
       </div>
 
@@ -236,6 +238,69 @@
         <div class="next-step">
           <strong>Próximo paso</strong>
           Dar seguimiento al resultado de la evaluación/adjudicación de la licitación.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v6H4V4zm0 10h16v6H4v-6zM8 7h.01M8 17h.01"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Migración de sistema de impresión a nuevo servidor</div>
+              <div class="card-client">Cliente: EPA</div>
+            </div>
+          </div>
+          <span class="badge progress">En coordinación</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%"></div></div>
+        <div class="bar-label">Avance estimado: 40%</div>
+        <div class="next-step">
+          <strong>Próximo paso</strong>
+          Migración coordinada con el cliente para los próximos días; dar seguimiento a su ejecución.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge green">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Suministro de equipos (licitación ganada)</div>
+              <div class="card-client">Cliente: Cervecería Nacional</div>
+            </div>
+          </div>
+          <span class="badge won">Cerrado — Ganado</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+        <div class="bar-label">Avance estimado: 92%</div>
+        <div class="next-step">
+          <strong>Próximo paso</strong>
+          El pedido ya está en proceso de compra hacia fábrica; dar seguimiento a la fecha de entrega definitiva.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Nuevas oportunidades — Clientes de Gobierno</div>
+              <div class="card-client">Cliente: Sector Público (CSS, Órgano Judicial, Contraloría, Ministerio de Gobierno y Justicia)</div>
+            </div>
+          </div>
+          <span class="badge progress">Recopilando información</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:15%"></div></div>
+        <div class="bar-label">Avance estimado: 15%</div>
+        <div class="next-step">
+          <strong>Próximo paso</strong>
+          Recopilar por entidad el proveedor actual, equipos contratados y vencimiento de arrendamientos, para preparar un nuevo pliego.
         </div>
       </div>
 
