@@ -284,6 +284,16 @@
   }
   .next-step strong{color:var(--cyan); font-weight:700; display:block; font-size:11px; text-transform:uppercase; letter-spacing:.07em; margin-bottom:5px;}
 
+  .ref-block{margin-top:14px; padding:14px 18px; background:rgba(255,255,255,0.03); border-left:3px solid var(--purple); border-radius:10px;}
+  .ref-block-title{color:var(--purple); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.07em; margin-bottom:10px; display:block;}
+  .ref-list{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .ref-item{font-size:13px; color:var(--text-2); line-height:1.4; padding-left:14px; position:relative;}
+  .ref-item::before{content:"•"; position:absolute; left:0; color:var(--purple);}
+  .ref-subject{color:var(--text-1); font-weight:600;}
+  .ref-item a{color:var(--cyan); text-decoration:none;}
+  .ref-item a:hover{text-decoration:underline;}
+  .ref-meta{color:var(--text-3); font-size:12px;}
+
   footer{
     margin-top:60px;
     padding-top:26px;
@@ -313,7 +323,7 @@
       <div class="title-block">
         <span class="eyebrow">CDP Digital</span>
         <h1>Proyectos y estado</h1>
-        <p class="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 16 de julio de 2026</p>
+        <p class="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 17 de julio de 2026</p>
         <div class="legend">
           <div class="legend-item"><span class="legend-dot" style="background:var(--amber); box-shadow:0 0 6px var(--amber)"></span>En proceso</div>
           <div class="legend-item"><span class="legend-dot" style="background:var(--teal); box-shadow:0 0 6px var(--teal)"></span>Activo / listo</div>
@@ -337,7 +347,7 @@
           <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6M9 17h6M9 9h2"/></svg>
         </div>
         <div>
-          <div class="num">4</div>
+          <div class="num">3</div>
           <div class="label">En proceso de cotización</div>
         </div>
       </div>
@@ -356,15 +366,15 @@
       <div>
         <div class="chart-block-title">Distribución de proyectos por estado</div>
         <div class="stack-bar">
-          <div class="stack-seg amber" style="width:calc(66.67% - 2px)"></div>
+          <div class="stack-seg amber" style="width:calc(50% - 2px)"></div>
           <div class="stack-gap"></div>
-          <div class="stack-seg teal" style="width:calc(16.67% - 2px)"></div>
+          <div class="stack-seg teal" style="width:calc(33.33% - 2px)"></div>
           <div class="stack-gap"></div>
           <div class="stack-seg green" style="width:calc(16.67% - 2px)"></div>
         </div>
         <div class="chart-legend">
-          <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--amber); box-shadow:0 0 6px var(--amber)"></span>En proceso — <strong>4</strong></div>
-          <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--teal); box-shadow:0 0 6px var(--teal)"></span>Activo / listo — <strong>1</strong></div>
+          <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--amber); box-shadow:0 0 6px var(--amber)"></span>En proceso — <strong>3</strong></div>
+          <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--teal); box-shadow:0 0 6px var(--teal)"></span>Activo / listo — <strong>2</strong></div>
           <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--green); box-shadow:0 0 6px var(--green)"></span>Cerrado y ganado — <strong>1</strong></div>
         </div>
       </div>
@@ -388,8 +398,8 @@
         </div>
         <div class="rank-row">
           <div class="rank-label">Convenio Marco — Sector Público</div>
-          <div class="rank-track"><div class="rank-fill" style="width:55%"></div></div>
-          <div class="rank-value">55%</div>
+          <div class="rank-track"><div class="rank-fill" style="width:85%"></div></div>
+          <div class="rank-value">85%</div>
         </div>
         <div class="rank-row">
           <div class="rank-label">Migración servidor — EPA</div>
@@ -449,10 +459,10 @@
         </div>
       </div>
 
-      <div class="card st-progress">
+      <div class="card st-active">
         <div class="card-top">
           <div class="card-heading">
-            <div class="icon-badge">
+            <div class="icon-badge teal">
               <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6M9 17h6M9 9h2"/></svg>
             </div>
             <div>
@@ -460,13 +470,25 @@
               <div class="card-client">Cliente: Sector Público (Licitación)</div>
             </div>
           </div>
-          <span class="badge progress">En evaluación</span>
+          <span class="badge active">Pendiente de firma</span>
         </div>
-        <div class="bar-track"><div class="bar-fill" style="width:55%"></div></div>
-        <div class="bar-label">Avance estimado: 55%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        <div class="bar-label">Avance estimado: 85%</div>
         <div class="next-step">
           <strong>Próximo paso</strong>
-          Dar seguimiento al resultado de la evaluación/adjudicación de la licitación.
+          Solo falta firmar el contrato con la entidad para poder subir nuestro portafolio a la tienda virtual.
+        </div>
+        <div class="ref-block">
+          <span class="ref-block-title">Correos de referencia</span>
+          <ul class="ref-list">
+            <li class="ref-item"><span class="ref-subject">Informe final de Convenio Marco</span> — Ivonne Canales <span class="ref-meta">· 6 may 2026</span></li>
+            <li class="ref-item"><span class="ref-subject">Resumen del informe de Convenio Marco</span> — Rene Becerra <span class="ref-meta">· 7 may 2026</span></li>
+            <li class="ref-item"><span class="ref-subject">Tabla_compacta_por_proponente.xlsx</span> (tabla comparativa por proponente) <span class="ref-meta">· 6 may 2026</span></li>
+            <li class="ref-item"><span class="ref-subject">Convenio Marco Panamá - Servicios de Impresión</span> (catálogo y precios) — Ivonne Canales / Ileana Miro <span class="ref-meta">· 9-16 mar 2026</span></li>
+            <li class="ref-item"><span class="ref-subject">Precios actualizados de Convenio Marco — Contrato de Arrendamiento</span> — Bodega CDP <span class="ref-meta">· 11 mar 2026</span></li>
+            <li class="ref-item"><span class="ref-subject">Cambio de especificación</span> (software de monitoreo y administración remota del pliego) — Ileana Miro <span class="ref-meta">· 12 mar 2026</span></li>
+            <li class="ref-item"><span class="ref-subject">Resumen de puntos clave del pliego</span> — Rene Becerra <span class="ref-meta">· 2 abr 2026</span></li>
+          </ul>
         </div>
       </div>
 
