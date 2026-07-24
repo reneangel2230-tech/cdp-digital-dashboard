@@ -2,8 +2,8 @@
   {
     "title": "Cambio de flota de impresión",
     "client": "Tzanetatos",
-    "status": "progress",
-    "badge": "Cotización en proceso",
+    "status": "active",
+    "badge": "Activo / listo",
     "progress": 55,
     "nextStep": "Revisar la cotización recibida del proveedor (opciones nube y on-premise) y consolidar la propuesta para pasar a comercial."
   },
