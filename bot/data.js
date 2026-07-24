@@ -1,5 +1,10 @@
-// Datos reflejados en index.html (dashboard CDP Digital)
-// Mantener sincronizado manualmente con el dashboard si este cambia.
+// Datos reflejados en index.html (dashboard CDP Digital).
+// El estado vivo se guarda en state.json y se actualiza vía /actualizar.
+
+const fs = require("fs");
+const path = require("path");
+
+const STATE_FILE = path.join(__dirname, "state.json");
 
 const STATUS = {
   progress: { emoji: "🟠", label: "En proceso" },
@@ -7,74 +12,32 @@ const STATUS = {
   won: { emoji: "🟢", label: "Cerrado — Ganado" },
 };
 
-const projects = [
-  {
-    title: "Cambio de flota de impresión",
-    client: "Tzanetatos",
-    status: "progress",
-    badge: "Cotización en proceso",
-    progress: 55,
-    nextStep:
-      "Revisar la cotización recibida del proveedor (opciones nube y on-premise) y consolidar la propuesta para pasar a comercial.",
-  },
-  {
-    title: "GavaTracking",
-    client: "Super Baru",
-    status: "active",
-    badge: "Cotización elaborada",
-    progress: 60,
-    nextStep:
-      "Gestionar internamente el envío de la cotización y el brochure ya elaborados al cliente.",
-  },
-  {
-    title: "Convenio Marco — Arrendamiento de Impresoras",
-    client: "Sector Público (Licitación)",
-    status: "progress",
-    badge: "En evaluación",
-    progress: 55,
-    nextStep: "Dar seguimiento al resultado de la evaluación/adjudicación de la licitación.",
-  },
-  {
-    title: "Migración de sistema de impresión a nuevo servidor",
-    client: "EPA",
-    status: "progress",
-    badge: "En coordinación",
-    progress: 45,
-    nextStep:
-      "Reunión de coordinación agendada con el cliente para definir el plan de migración; confirmar responsable interno del proyecto.",
-  },
-  {
-    title: "Suministro de equipos (licitación ganada)",
-    client: "Cervecería Nacional",
-    status: "won",
-    badge: "Cerrado — Ganado",
-    progress: 92,
-    nextStep: "El pedido ya está en proceso de compra hacia fábrica; dar seguimiento a la fecha de entrega definitiva.",
-  },
-  {
-    title: "Nuevas oportunidades — Clientes de Gobierno",
-    client: "Sector Público (CSS, Órgano Judicial, Contraloría, Ministerio de Gobierno y Justicia)",
-    status: "progress",
-    badge: "Recopilando información",
-    progress: 15,
-    nextStep:
-      "Recopilar por entidad el proveedor actual, equipos contratados y vencimiento de arrendamientos, para preparar un nuevo pliego.",
-  },
-  {
-    title: "Nueva oportunidad — Suministros de impresión",
-    client: "Novartis",
-    status: "progress",
-    badge: "Identificando alcance",
-    progress: 15,
-    nextStep: "Identificar los artículos y el proveedor correspondiente para preparar la cotización.",
-  },
-];
+function getProjects() {
+  return JSON.parse(fs.readFileSync(STATE_FILE, "utf8"));
+}
 
-const metrics = {
-  proyectosActivos: 7,
-  enProcesoCotizacion: 5,
-  clientesInvolucrados: 7,
-  actualizado: "17 de julio de 2026",
-};
+function saveProjects(projects) {
+  fs.writeFileSync(STATE_FILE, JSON.stringify(projects, null, 2) + "\n");
+}
 
-module.exports = { STATUS, projects, metrics };
+function getMetrics() {
+  const projects = getProjects();
+  return {
+    proyectosActivos: projects.length,
+    enProcesoCotizacion: projects.filter((p) => p.status === "progress").length,
+    clientesInvolucrados: new Set(projects.map((p) => p.client)).size,
+  };
+}
+
+function updateProject(index, { progress, status }) {
+  const projects = getProjects();
+  const project = projects[index];
+  if (!project) throw new Error("Proyecto no encontrado");
+  const before = { progress: project.progress, status: project.status };
+  if (progress !== undefined) project.progress = progress;
+  if (status !== undefined) project.status = status;
+  saveProjects(projects);
+  return { project, before };
+}
+
+module.exports = { STATUS, getProjects, getMetrics, updateProject };
