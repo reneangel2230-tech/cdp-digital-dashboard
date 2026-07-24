@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { Telegraf, Markup } = require("telegraf");
-const { STATUS, getProjects, getMetrics, updateProject } = require("./data");
+const { STATUS, getProjects, getMetrics, updateProject, addProject } = require("./data");
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 if (!token) {
@@ -32,6 +32,20 @@ function isAllowed(id) {
 
 function isAdmin(id) {
   return adminIds.has(id);
+}
+
+// Devuelve true si ctx.from puede continuar; si no, ya respondió el motivo.
+function requireAdmin(ctx) {
+  if (isAdmin(ctx.from.id)) return true;
+  if (adminIds.size === 0) {
+    ctx.reply(
+      `⛔ Este comando requiere configurar TELEGRAM_ADMIN_IDS en .env.\nTu ID de Telegram: \`${ctx.from.id}\``,
+      { parse_mode: "Markdown" }
+    );
+  } else {
+    ctx.reply("⛔ Solo un administrador puede usar este comando.");
+  }
+  return false;
 }
 
 const bot = new Telegraf(token);
@@ -105,7 +119,9 @@ bot.help((ctx) =>
       "/proyectos — lista de todos los proyectos (con botones)\n" +
       "/proyecto <número> — detalle de un proyecto\n" +
       (isAdmin(ctx.from.id)
-        ? "/actualizar <número> <avance> [progreso|activo|ganado] — actualiza un proyecto y notifica"
+        ? "/actualizar <número> <avance> [progreso|activo|ganado] — actualiza un proyecto y notifica\n" +
+          "/nuevo Título | Cliente | avance | estado | próximo paso — crea un proyecto\n" +
+          "/nota <número> <texto> — actualiza el próximo paso de un proyecto"
         : "")
   )
 );
@@ -155,15 +171,7 @@ bot.command("proyecto", (ctx) => {
 });
 
 bot.command("actualizar", async (ctx) => {
-  if (!isAdmin(ctx.from.id)) {
-    if (adminIds.size === 0) {
-      return ctx.reply(
-        `⛔ Este comando requiere configurar TELEGRAM_ADMIN_IDS en .env.\nTu ID de Telegram: \`${ctx.from.id}\``,
-        { parse_mode: "Markdown" }
-      );
-    }
-    return ctx.reply("⛔ Solo un administrador puede usar este comando.");
-  }
+  if (!requireAdmin(ctx)) return;
 
   const args = ctx.message.text.split(" ").slice(1);
   const [numStr, avanceStr, estadoStr] = args;
@@ -199,6 +207,62 @@ bot.command("actualizar", async (ctx) => {
       console.error("No se pudo enviar la notificación:", err.message);
     });
   }
+});
+
+bot.command("nuevo", async (ctx) => {
+  if (!requireAdmin(ctx)) return;
+
+  const raw = ctx.message.text.split(" ").slice(1).join(" ");
+  const parts = raw.split("|").map((s) => s.trim());
+  const [title, client, avanceStr, estadoStr, nextStep] = parts;
+  const avance = parseInt(avanceStr, 10);
+  const estado = estadoStr ? ESTADOS[estadoStr.toLowerCase()] : undefined;
+
+  if (!title || !client || !avanceStr || !estadoStr) {
+    return ctx.reply(
+      "Uso: /nuevo Título | Cliente | avance | progreso|activo|ganado | próximo paso (opcional)\n" +
+        "Ejemplo: /nuevo Renovación de contrato | ACME | 20 | progreso | Enviar propuesta inicial"
+    );
+  }
+  if (!Number.isInteger(avance) || avance < 0 || avance > 100) {
+    return ctx.reply("El avance debe ser un número entre 0 y 100.");
+  }
+  if (!estado) {
+    return ctx.reply("Estado inválido. Usa: progreso | activo | ganado.");
+  }
+
+  const { project, index } = addProject({ title, client, progress: avance, status: estado, nextStep });
+
+  await ctx.reply(`✅ Proyecto #${index + 1} creado:\n\n${formatProject(project, index + 1)}`, {
+    parse_mode: "Markdown",
+  });
+
+  if (notifyChatId) {
+    bot.telegram
+      .sendMessage(notifyChatId, `🆕 *Nuevo proyecto*\n\n${formatProject(project, index + 1)}`, {
+        parse_mode: "Markdown",
+      })
+      .catch((err) => console.error("No se pudo enviar la notificación:", err.message));
+  }
+});
+
+bot.command("nota", async (ctx) => {
+  if (!requireAdmin(ctx)) return;
+
+  const args = ctx.message.text.split(" ").slice(1);
+  const numStr = args[0];
+  const texto = args.slice(1).join(" ").trim();
+  const projects = getProjects();
+  const idx = parseInt(numStr, 10) - 1;
+
+  if (!Number.isInteger(idx) || idx < 0 || idx >= projects.length || !texto) {
+    return ctx.reply(
+      `Uso: /nota <número> <texto>\nEjemplo: /nota 3 Cliente confirmó reunión para el lunes.\n(número entre 1 y ${projects.length})`
+    );
+  }
+
+  const { project } = updateProject(idx, { nextStep: texto });
+  ctx.reply(`✅ Próximo paso actualizado:\n\n${formatProject(project, idx + 1)}`, { parse_mode: "Markdown" });
 });
 
 bot.launch();

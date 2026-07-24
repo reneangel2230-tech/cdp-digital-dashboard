@@ -29,15 +29,31 @@ function getMetrics() {
   };
 }
 
-function updateProject(index, { progress, status }) {
+function updateProject(index, { progress, status, nextStep }) {
   const projects = getProjects();
   const project = projects[index];
   if (!project) throw new Error("Proyecto no encontrado");
-  const before = { progress: project.progress, status: project.status };
+  const before = { progress: project.progress, status: project.status, nextStep: project.nextStep };
   if (progress !== undefined) project.progress = progress;
   if (status !== undefined) project.status = status;
+  if (nextStep !== undefined) project.nextStep = nextStep;
   saveProjects(projects);
   return { project, before };
 }
 
-module.exports = { STATUS, getProjects, getMetrics, updateProject };
+function addProject({ title, client, progress, status, badge, nextStep }) {
+  const projects = getProjects();
+  const project = {
+    title,
+    client,
+    status,
+    badge: badge || STATUS[status].label,
+    progress,
+    nextStep: nextStep || "Por definir.",
+  };
+  projects.push(project);
+  saveProjects(projects);
+  return { project, index: projects.length - 1 };
+}
+
+module.exports = { STATUS, getProjects, getMetrics, updateProject, addProject };
