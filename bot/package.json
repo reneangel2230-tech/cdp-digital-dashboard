@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Bot de Telegram para consultar el estado de proyectos del dashboard CDP Digital",
   "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "node index.js"
   },
