@@ -35,7 +35,10 @@ function updateProject(index, { progress, status, nextStep }) {
   if (!project) throw new Error("Proyecto no encontrado");
   const before = { progress: project.progress, status: project.status, nextStep: project.nextStep };
   if (progress !== undefined) project.progress = progress;
-  if (status !== undefined) project.status = status;
+  if (status !== undefined) {
+    project.status = status;
+    project.badge = STATUS[status].label;
+  }
   if (nextStep !== undefined) project.nextStep = nextStep;
   saveProjects(projects);
   return { project, before };

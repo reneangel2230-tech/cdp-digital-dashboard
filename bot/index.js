@@ -87,8 +87,35 @@ function projectsKeyboard(projects) {
   return Markup.inlineKeyboard(rows);
 }
 
-function backKeyboard() {
-  return Markup.inlineKeyboard([[Markup.button.callback("⬅️ Volver a la lista", "listar")]]);
+function detailKeyboard(idx, adminUser) {
+  const rows = [];
+  if (adminUser) {
+    rows.push([
+      Markup.button.callback("➖10%", `bump_${idx}_-10`),
+      Markup.button.callback("➕10%", `bump_${idx}_10`),
+    ]);
+    rows.push([
+      Markup.button.callback("🟠 Progreso", `estado_${idx}_progress`),
+      Markup.button.callback("🔵 Activo", `estado_${idx}_active`),
+      Markup.button.callback("🟢 Ganado", `estado_${idx}_won`),
+    ]);
+  }
+  rows.push([Markup.button.callback("⬅️ Volver a la lista", "listar")]);
+  return Markup.inlineKeyboard(rows);
+}
+
+function notifyUpdate(ctx, project, before) {
+  if (!notifyChatId) return;
+  const notifyText =
+    `🔔 *Actualización de proyecto*\n\n` +
+    `${STATUS[project.status].emoji} *${project.title}*\n` +
+    `Cliente: ${project.client}\n` +
+    `Avance: ${before.progress}% → *${project.progress}%*\n` +
+    `Estado: ${STATUS[before.status].label} → *${STATUS[project.status].label}*\n` +
+    `Actualizado por: ${ctx.from.first_name || ctx.from.id}`;
+  bot.telegram
+    .sendMessage(notifyChatId, notifyText, { parse_mode: "Markdown" })
+    .catch((err) => console.error("No se pudo enviar la notificación:", err.message));
 }
 
 function resumenText() {
@@ -152,9 +179,48 @@ bot.action(/^ver_(\d+)$/, async (ctx) => {
   const projects = getProjects();
   const project = projects[idx];
   if (!project) return ctx.reply("Proyecto no encontrado.");
+  const keyboard = detailKeyboard(idx, isAdmin(ctx.from.id));
   ctx
-    .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...backKeyboard() })
-    .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...backKeyboard() }));
+    .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard })
+    .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard }));
+});
+
+bot.action(/^bump_(\d+)_(-?\d+)$/, async (ctx) => {
+  const idx = Number(ctx.match[1]);
+  const delta = Number(ctx.match[2]);
+  if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Solo administradores.", { show_alert: true });
+
+  const projects = getProjects();
+  const current = projects[idx];
+  if (!current) return ctx.answerCbQuery("Proyecto no encontrado.");
+
+  const nuevoAvance = Math.min(100, Math.max(0, current.progress + delta));
+  const { project, before } = updateProject(idx, { progress: nuevoAvance });
+  await ctx.answerCbQuery(`Avance: ${project.progress}%`);
+
+  const keyboard = detailKeyboard(idx, true);
+  ctx
+    .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard })
+    .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard }));
+  notifyUpdate(ctx, project, before);
+});
+
+bot.action(/^estado_(\d+)_(progress|active|won)$/, async (ctx) => {
+  const idx = Number(ctx.match[1]);
+  const nuevoEstado = ctx.match[2];
+  if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Solo administradores.", { show_alert: true });
+
+  const projects = getProjects();
+  if (!projects[idx]) return ctx.answerCbQuery("Proyecto no encontrado.");
+
+  const { project, before } = updateProject(idx, { status: nuevoEstado });
+  await ctx.answerCbQuery(`Estado: ${STATUS[project.status].label}`);
+
+  const keyboard = detailKeyboard(idx, true);
+  ctx
+    .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard })
+    .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard }));
+  notifyUpdate(ctx, project, before);
 });
 
 bot.command("proyecto", (ctx) => {
@@ -193,20 +259,7 @@ bot.command("actualizar", async (ctx) => {
   const { project, before } = updateProject(idx, { progress: avance, status: estado });
 
   await ctx.reply(`✅ Actualizado: *${project.title}*`, { parse_mode: "Markdown" });
-
-  const notifyText =
-    `🔔 *Actualización de proyecto*\n\n` +
-    `${STATUS[project.status].emoji} *${project.title}*\n` +
-    `Cliente: ${project.client}\n` +
-    `Avance: ${before.progress}% → *${project.progress}%*\n` +
-    `Estado: ${STATUS[before.status].label} → *${STATUS[project.status].label}*\n` +
-    `Actualizado por: ${ctx.from.first_name || ctx.from.id}`;
-
-  if (notifyChatId) {
-    bot.telegram.sendMessage(notifyChatId, notifyText, { parse_mode: "Markdown" }).catch((err) => {
-      console.error("No se pudo enviar la notificación:", err.message);
-    });
-  }
+  notifyUpdate(ctx, project, before);
 });
 
 bot.command("nuevo", async (ctx) => {
