@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { Telegraf, Markup } = require("telegraf");
-const { STATUS, getProjects, getMetrics, updateProject, addProject } = require("./data");
+const { STATUS, getProjects, getCategoryProjects, getMetrics, updateProject, addProject } = require("./data");
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 if (!token) {
@@ -80,14 +80,18 @@ function formatProject(p, index) {
   );
 }
 
-function projectsKeyboard(projects) {
-  const rows = projects.map((p, i) => [
-    Markup.button.callback(`${STATUS[p.status].emoji} ${p.title}`, `ver_${i}`),
+function projectsKeyboard(pairs) {
+  const rows = pairs.map(({ project, index }) => [
+    Markup.button.callback(`${STATUS[project.status].emoji} ${project.title}`, `ver_${index}`),
   ]);
   return Markup.inlineKeyboard(rows);
 }
 
-function detailKeyboard(idx, adminUser) {
+function backActionFor(project) {
+  return project.category === "playa" ? "listar_playa" : "listar";
+}
+
+function detailKeyboard(idx, adminUser, backAction) {
   const rows = [];
   if (adminUser) {
     rows.push([
@@ -100,7 +104,7 @@ function detailKeyboard(idx, adminUser) {
       Markup.button.callback("🟢 Ganado", `estado_${idx}_won`),
     ]);
   }
-  rows.push([Markup.button.callback("⬅️ Volver a la lista", "listar")]);
+  rows.push([Markup.button.callback("⬅️ Volver a la lista", backAction)]);
   return Markup.inlineKeyboard(rows);
 }
 
@@ -145,6 +149,7 @@ bot.help((ctx) =>
       "/resumen — métricas generales\n" +
       "/proyectos — lista de todos los proyectos (con botones)\n" +
       "/proyecto <número> — detalle de un proyecto\n" +
+      "/playa — sub-proyectos de Propiedades de la Playa\n" +
       (isAdmin(ctx.from.id)
         ? "/actualizar <número> <avance> [progreso|activo|ganado] — actualiza un proyecto y notifica\n" +
           "/nuevo Título | Cliente | avance | estado | próximo paso — crea un proyecto\n" +
@@ -161,16 +166,27 @@ bot.action("resumen", async (ctx) => {
 });
 
 bot.command("proyectos", (ctx) => {
-  const projects = getProjects();
-  ctx.reply("Selecciona un proyecto:", projectsKeyboard(projects));
+  ctx.reply("Selecciona un proyecto:", projectsKeyboard(getCategoryProjects("cdp")));
 });
 
 bot.action("listar", async (ctx) => {
   await ctx.answerCbQuery();
-  const projects = getProjects();
-  ctx.editMessageText("Selecciona un proyecto:", projectsKeyboard(projects)).catch(() =>
-    ctx.reply("Selecciona un proyecto:", projectsKeyboard(projects))
-  );
+  const keyboard = projectsKeyboard(getCategoryProjects("cdp"));
+  ctx
+    .editMessageText("Selecciona un proyecto:", keyboard)
+    .catch(() => ctx.reply("Selecciona un proyecto:", keyboard));
+});
+
+bot.command("playa", (ctx) => {
+  ctx.reply("🏖️ Propiedades de la Playa — selecciona un sub-proyecto:", projectsKeyboard(getCategoryProjects("playa")));
+});
+
+bot.action("listar_playa", async (ctx) => {
+  await ctx.answerCbQuery();
+  const keyboard = projectsKeyboard(getCategoryProjects("playa"));
+  ctx
+    .editMessageText("🏖️ Propiedades de la Playa — selecciona un sub-proyecto:", keyboard)
+    .catch(() => ctx.reply("🏖️ Propiedades de la Playa — selecciona un sub-proyecto:", keyboard));
 });
 
 bot.action(/^ver_(\d+)$/, async (ctx) => {
@@ -179,7 +195,7 @@ bot.action(/^ver_(\d+)$/, async (ctx) => {
   const projects = getProjects();
   const project = projects[idx];
   if (!project) return ctx.reply("Proyecto no encontrado.");
-  const keyboard = detailKeyboard(idx, isAdmin(ctx.from.id));
+  const keyboard = detailKeyboard(idx, isAdmin(ctx.from.id), backActionFor(project));
   ctx
     .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard })
     .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard }));
@@ -198,7 +214,7 @@ bot.action(/^bump_(\d+)_(-?\d+)$/, async (ctx) => {
   const { project, before } = updateProject(idx, { progress: nuevoAvance });
   await ctx.answerCbQuery(`Avance: ${project.progress}%`);
 
-  const keyboard = detailKeyboard(idx, true);
+  const keyboard = detailKeyboard(idx, true, backActionFor(project));
   ctx
     .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard })
     .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard }));
@@ -216,7 +232,7 @@ bot.action(/^estado_(\d+)_(progress|active|won)$/, async (ctx) => {
   const { project, before } = updateProject(idx, { status: nuevoEstado });
   await ctx.answerCbQuery(`Estado: ${STATUS[project.status].label}`);
 
-  const keyboard = detailKeyboard(idx, true);
+  const keyboard = detailKeyboard(idx, true, backActionFor(project));
   ctx
     .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard })
     .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard }));

@@ -20,8 +20,14 @@ function saveProjects(projects) {
   fs.writeFileSync(STATE_FILE, JSON.stringify(projects, null, 2) + "\n");
 }
 
-function getMetrics() {
-  const projects = getProjects();
+function getCategoryProjects(category) {
+  return getProjects()
+    .map((project, index) => ({ project, index }))
+    .filter(({ project }) => (project.category || "cdp") === category);
+}
+
+function getMetrics(category = "cdp") {
+  const projects = getProjects().filter((p) => (p.category || "cdp") === category);
   return {
     proyectosActivos: projects.length,
     enProcesoCotizacion: projects.filter((p) => p.status === "progress").length,
@@ -44,11 +50,12 @@ function updateProject(index, { progress, status, nextStep }) {
   return { project, before };
 }
 
-function addProject({ title, client, progress, status, badge, nextStep }) {
+function addProject({ title, client, progress, status, badge, nextStep, category = "cdp" }) {
   const projects = getProjects();
   const project = {
     title,
     client,
+    category,
     status,
     badge: badge || STATUS[status].label,
     progress,
@@ -59,4 +66,4 @@ function addProject({ title, client, progress, status, badge, nextStep }) {
   return { project, index: projects.length - 1 };
 }
 
-module.exports = { STATUS, getProjects, getMetrics, updateProject, addProject };
+module.exports = { STATUS, getProjects, getCategoryProjects, getMetrics, updateProject, addProject };

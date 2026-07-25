@@ -35,6 +35,8 @@ npm start
 - `/resumen` — métricas generales (proyectos activos, en cotización, clientes)
 - `/proyectos` — lista de todos los proyectos con botones para ver el detalle
 - `/proyecto <número>` — detalle de un proyecto puntual
+- `/playa` — sub-proyectos de *Propiedades de la Playa* (categoría separada,
+  no cuenta en `/resumen` ni en la lista de `/proyectos`)
 - `/actualizar <número> <avance> [progreso|activo|ganado]` — solo administradores;
   actualiza el avance/estado de un proyecto y notifica el cambio
 
@@ -75,6 +77,11 @@ Los datos base viven en `state.json` (se actualizan solos con `/actualizar`,
 o edítalos a mano). Los textos fijos de cada proyecto (título, cliente,
 próximo paso) deben mantenerse sincronizados manualmente con `../index.html`
 si el dashboard cambia.
+
+Cada proyecto tiene un campo `category` (`"cdp"` o `"playa"`). Los proyectos
+`"cdp"` son los que aparecen en `index.html` y en `/proyectos` / `/resumen`;
+los `"playa"` son personales y solo se ven con `/playa`. Si no se especifica
+`category`, se asume `"cdp"` (así `/nuevo` sigue funcionando igual que antes).
 
 ## Despliegue permanente (Railway)
 
