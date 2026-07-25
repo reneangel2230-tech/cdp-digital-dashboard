@@ -84,6 +84,7 @@ function projectsKeyboard(pairs) {
   const rows = pairs.map(({ project, index }) => [
     Markup.button.callback(`${STATUS[project.status].emoji} ${project.title}`, `ver_${index}`),
   ]);
+  rows.push([Markup.button.callback("🏠 Menú principal", "menu")]);
   return Markup.inlineKeyboard(rows);
 }
 
@@ -132,20 +133,36 @@ function resumenText() {
   );
 }
 
+function mainMenuKeyboard() {
+  return Markup.inlineKeyboard([
+    [Markup.button.callback("📊 Resumen", "resumen")],
+    [Markup.button.callback("📋 CDP Digital", "listar"), Markup.button.callback("🏖️ Playa", "listar_playa")],
+  ]);
+}
+
 bot.start((ctx) =>
   ctx.reply(
     "👋 Hola, soy el bot de *CDP Digital*.\n\n" +
-      "Puedo darte el estado de los proyectos del dashboard.\n\n" +
+      "Elige qué quieres ver:\n\n" +
       `Tu ID de Telegram: \`${ctx.from.id}\``,
-    { parse_mode: "Markdown", ...Markup.inlineKeyboard([
-      [Markup.button.callback("📊 Resumen", "resumen"), Markup.button.callback("📋 Proyectos", "listar")],
-    ]) }
+    { parse_mode: "Markdown", ...mainMenuKeyboard() }
   )
 );
+
+bot.command("menu", (ctx) => ctx.reply("¿Qué quieres ver?", mainMenuKeyboard()));
+
+bot.action("menu", async (ctx) => {
+  await ctx.answerCbQuery();
+  const keyboard = mainMenuKeyboard();
+  ctx
+    .editMessageText("¿Qué quieres ver?", keyboard)
+    .catch(() => ctx.reply("¿Qué quieres ver?", keyboard));
+});
 
 bot.help((ctx) =>
   ctx.reply(
     "Comandos disponibles:\n" +
+      "/menu — menú principal con botones\n" +
       "/resumen — métricas generales\n" +
       "/proyectos — lista de todos los proyectos (con botones)\n" +
       "/proyecto <número> — detalle de un proyecto\n" +
