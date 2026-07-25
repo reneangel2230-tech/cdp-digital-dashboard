@@ -1,10 +1,21 @@
 // Datos reflejados en index.html (dashboard CDP Digital).
-// El estado vivo se guarda en state.json y se actualiza vía /actualizar.
+// state.seed.json (versionado en git) es la carga inicial. El estado vivo se
+// guarda aparte, en DATA_DIR, para sobrevivir a los redeploys — ver README.
 
 const fs = require("fs");
 const path = require("path");
 
-const STATE_FILE = path.join(__dirname, "state.json");
+const SEED_FILE = path.join(__dirname, "state.seed.json");
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, ".data");
+const STATE_FILE = path.join(DATA_DIR, "state.json");
+
+function ensureStateFile() {
+  if (fs.existsSync(STATE_FILE)) return;
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.copyFileSync(SEED_FILE, STATE_FILE);
+}
+
+ensureStateFile();
 
 const STATUS = {
   progress: { emoji: "🟠", label: "En proceso" },

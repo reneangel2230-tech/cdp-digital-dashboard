@@ -64,8 +64,9 @@ consultarlo. Para restringirlo:
 ```
 
 Esto pone el proyecto #2 en 75% de avance y estado "activo", guarda el cambio
-en `state.json`, y si configuras `TELEGRAM_NOTIFY_CHAT_ID` (el ID de un chat o
-canal), envía ahí un aviso automático con el cambio (antes → después).
+en el estado persistente (ver sección "Persistencia de los datos" más abajo),
+y si configuras `TELEGRAM_NOTIFY_CHAT_ID` (el ID de un chat o canal), envía
+ahí un aviso automático con el cambio (antes → después).
 
 Para obtener el ID de un canal/grupo: agrega el bot a ese chat y usa cualquier
 bot auxiliar tipo @userinfobot, o revisa los logs del bot al recibir un mensaje
@@ -73,15 +74,51 @@ ahí.
 
 ## Actualizar los datos
 
-Los datos base viven en `state.json` (se actualizan solos con `/actualizar`,
-o edítalos a mano). Los textos fijos de cada proyecto (título, cliente,
-próximo paso) deben mantenerse sincronizados manualmente con `../index.html`
-si el dashboard cambia.
+`state.seed.json` es la carga inicial versionada en git — edítalo a mano
+cuando quieras cambiar los datos "de fábrica" del bot (por ejemplo, para
+llevar al repo un cambio hecho en el dashboard). Los textos fijos de cada
+proyecto (título, cliente, próximo paso) deben mantenerse sincronizados
+manualmente con `../index.html` si el dashboard cambia.
 
 Cada proyecto tiene un campo `category` (`"cdp"` o `"playa"`). Los proyectos
 `"cdp"` son los que aparecen en `index.html` y en `/proyectos` / `/resumen`;
 los `"playa"` son personales y solo se ven con `/playa`. Si no se especifica
 `category`, se asume `"cdp"` (así `/nuevo` sigue funcionando igual que antes).
+
+## Persistencia de los datos
+
+El bot separa dos archivos:
+
+- **`state.seed.json`** — versionado en git, es la carga inicial.
+- **`.data/state.json`** (o `$DATA_DIR/state.json`) — el estado *vivo*, donde
+  se guardan los cambios hechos con `/actualizar`, `/nuevo`, `/nota` o los
+  botones. No está en git (`.gitignore`).
+
+La primera vez que el bot arranca y no encuentra `.data/state.json`, lo crea
+copiando `state.seed.json`. De ahí en adelante, todos los cambios se guardan
+solo en `.data/state.json`.
+
+**Localmente**, `.data/` vive dentro de `bot/` y es efímero como cualquier
+carpeta del proyecto (se borra si borras el repo). Para producción, hay que
+apuntar `DATA_DIR` a un disco que sobreviva a los redeploys:
+
+### Configurar el volumen en Railway
+
+1. En el servicio del bot, ve a **Settings → Volumes** → **New Volume**.
+2. Ponle un **Mount Path**, por ejemplo `/data`.
+3. En **Variables**, agrega:
+   ```
+   DATA_DIR=/data
+   ```
+4. Redeploy. La primera vez el bot copia `state.seed.json` a `/data/state.json`;
+   en los siguientes deploys, como `/data` es el volumen (no el contenedor
+   efímero), esos datos ya no se pierden.
+
+**Importante:** una vez que el volumen tiene su propio `state.json`, editar
+`state.seed.json` en git **ya no actualiza automáticamente** la producción
+(solo afecta a instalaciones nuevas que arrancan sin volumen). Si necesitas
+corregir algo que ya está en el volumen, hazlo con `/actualizar`, `/nota` o
+los botones del bot directamente.
 
 ## Despliegue permanente (Railway)
 
@@ -107,12 +144,8 @@ plan gratuito con eso alcanza.
    `Bot de Telegram iniciado.`
 6. No actives "Public Networking" — el bot no expone un puerto HTTP, solo
    necesita que el proceso siga vivo.
-
-**Nota sobre `state.json`:** cada nuevo deploy (por ejemplo, al hacer push a
-la rama) reinicia el contenedor con el `state.json` que está en el repo. Si
-usas `/actualizar`, `/nuevo` o los botones para cambiar datos en producción,
-esos cambios viven solo en ese contenedor hasta el próximo deploy — no se
-reflejan de vuelta en GitHub automáticamente.
+7. Para que los datos sobrevivan a los redeploys, configura un volumen — ver
+   "Persistencia de los datos" más abajo.
 
 ## Alternativas
 
