@@ -4,18 +4,18 @@
     "client": "Tzanetatos",
     "category": "cdp",
     "status": "active",
-    "badge": "Activo / listo",
-    "progress": 55,
-    "nextStep": "Revisar la cotización recibida del proveedor (opciones nube y on-premise) y consolidar la propuesta para pasar a comercial."
+    "badge": "Propuesta trasladada a comercial",
+    "progress": 70,
+    "nextStep": "Con la cotización del proveedor ya revisada y trasladada al equipo comercial, preparar y enviar la propuesta formal al cliente."
   },
   {
     "title": "GavaTracking",
     "client": "Super Baru",
     "category": "cdp",
     "status": "active",
-    "badge": "Cotización elaborada",
-    "progress": 60,
-    "nextStep": "Gestionar internamente el envío de la cotización y el brochure ya elaborados al cliente."
+    "badge": "Cotización enviada",
+    "progress": 65,
+    "nextStep": "Confirmar que la cotización y el brochure, ya remitidos internamente, fueron entregados al cliente, y dar seguimiento a su respuesta."
   },
   {
     "title": "Convenio Marco — Arrendamiento de Impresoras",
@@ -31,9 +31,9 @@
     "client": "EPA",
     "category": "cdp",
     "status": "progress",
-    "badge": "En coordinación",
-    "progress": 45,
-    "nextStep": "Reunión de coordinación agendada con el cliente para definir el plan de migración; confirmar responsable interno del proyecto."
+    "badge": "En seguimiento",
+    "progress": 60,
+    "nextStep": "Ya se definió el responsable interno del proyecto; coordinar y ejecutar la migración del sistema de impresión hacia el nuevo servidor."
   },
   {
     "title": "Suministro de equipos (licitación ganada)",
@@ -54,13 +54,13 @@
     "nextStep": "Recopilar por entidad el proveedor actual, equipos contratados y vencimiento de arrendamientos, para preparar un nuevo pliego."
   },
   {
-    "title": "Nueva oportunidad — Suministros de impresión",
+    "title": "Suministros de impresión",
     "client": "Novartis",
     "category": "cdp",
-    "status": "progress",
-    "badge": "Identificando alcance",
-    "progress": 15,
-    "nextStep": "Identificar los artículos y el proveedor correspondiente para preparar la cotización."
+    "status": "lost",
+    "badge": "Cerrado — No aceptado",
+    "progress": 30,
+    "nextStep": "Oportunidad cerrada — el cliente no aceptó la propuesta presentada. Sin próximos pasos."
   },
   {
     "title": "Hotel",

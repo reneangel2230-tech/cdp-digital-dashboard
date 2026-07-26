@@ -37,7 +37,7 @@ npm start
 - `/proyecto <número>` — detalle de un proyecto puntual
 - `/playa` — sub-proyectos de *Propiedades de la Playa* (categoría separada,
   no cuenta en `/resumen` ni en la lista de `/proyectos`)
-- `/actualizar <número> <avance> [progreso|activo|ganado]` — solo administradores;
+- `/actualizar <número> <avance> [progreso|activo|ganado|perdido]` — solo administradores;
   actualiza el avance/estado de un proyecto y notifica el cambio
 
 ## Restringir quién puede usar el bot
@@ -120,6 +120,36 @@ apuntar `DATA_DIR` a un disco que sobreviva a los redeploys:
 corregir algo que ya está en el volumen, hazlo con `/actualizar`, `/nota` o
 los botones del bot directamente.
 
+## Dashboard en vivo (`index.html` conectado al bot)
+
+Además del bot, `bot/server.js` levanta una pequeña API de solo lectura para
+que `index.html` deje de tener los datos hardcodeados y los lea en vivo del
+mismo estado que usa el bot. Solo se activa si hay un puerto público
+disponible (variable `PORT`, que Railway asigna automáticamente al activar
+"Public Networking").
+
+- **`GET /api/dashboard`** — devuelve `{ metrics, projects, updatedAt }` con
+  únicamente los proyectos de categoría `"cdp"` (los personales de `"playa"`
+  nunca se exponen por este endpoint).
+- **`GET /health`** — chequeo simple de que el servidor está arriba.
+
+Para conectar el dashboard:
+
+1. En Railway, entra al servicio del bot → **Settings → Networking →
+   Generate Domain**. Esto activa "Public Networking" y te da una URL pública
+   (algo como `https://tu-bot.up.railway.app`).
+2. En `index.html`, busca la línea `const DASHBOARD_API_URL = "";` (cerca del
+   final del archivo) y pon ahí esa URL, sin la barra final:
+   ```js
+   const DASHBOARD_API_URL = "https://tu-bot.up.railway.app";
+   ```
+3. Publica ese cambio (commit + push). El dashboard, al cargar, intentará
+   leer `${DASHBOARD_API_URL}/api/dashboard`; si el bot no responde, se queda
+   con el contenido estático de siempre (no se rompe la página).
+
+Debajo del título del dashboard aparece un indicador (🟢 conectado / ⚪ datos
+estáticos) para saber si la conexión en vivo está funcionando.
+
 ## Despliegue permanente (Railway)
 
 Este script usa *long polling* (`bot.launch()`): no necesita dominio ni
@@ -142,8 +172,9 @@ plan gratuito con eso alcanza.
 5. Railway detecta `package.json`/`railway.toml` automáticamente y corre
    `node index.js`. Revisa la pestaña **Deployments → Logs**: debe decir
    `Bot de Telegram iniciado.`
-6. No actives "Public Networking" — el bot no expone un puerto HTTP, solo
-   necesita que el proceso siga vivo.
+6. El bot funciona sin necesidad de puerto público (usa *long polling*). Si
+   además quieres que `index.html` lea los datos en vivo, activa
+   "Public Networking" — ver "Dashboard en vivo" más arriba.
 7. Para que los datos sobrevivan a los redeploys, configura un volumen — ver
    "Persistencia de los datos" más abajo.
 

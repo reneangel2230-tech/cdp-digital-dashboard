@@ -21,6 +21,7 @@ const STATUS = {
   progress: { emoji: "🟠", label: "En proceso" },
   active: { emoji: "🔵", label: "Activo / listo" },
   won: { emoji: "🟢", label: "Cerrado — Ganado" },
+  lost: { emoji: "🔴", label: "Cerrado — No aceptado" },
 };
 
 function getProjects() {

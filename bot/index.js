@@ -22,7 +22,7 @@ const allowedIds = parseIds(process.env.TELEGRAM_ALLOWED_IDS);
 const adminIds = parseIds(process.env.TELEGRAM_ADMIN_IDS);
 const notifyChatId = process.env.TELEGRAM_NOTIFY_CHAT_ID;
 
-const ESTADOS = { progreso: "progress", activo: "active", ganado: "won" };
+const ESTADOS = { progreso: "progress", activo: "active", ganado: "won", perdido: "lost" };
 
 // Sin TELEGRAM_ALLOWED_IDS configurado, el bot queda abierto (comportamiento
 // original) para no bloquear al dueño antes de que conozca su propio ID.
@@ -102,7 +102,10 @@ function detailKeyboard(idx, adminUser, backAction) {
     rows.push([
       Markup.button.callback("🟠 Progreso", `estado_${idx}_progress`),
       Markup.button.callback("🔵 Activo", `estado_${idx}_active`),
+    ]);
+    rows.push([
       Markup.button.callback("🟢 Ganado", `estado_${idx}_won`),
+      Markup.button.callback("🔴 Perdido", `estado_${idx}_lost`),
     ]);
   }
   rows.push([Markup.button.callback("⬅️ Volver a la lista", backAction)]);
@@ -168,7 +171,7 @@ bot.help((ctx) =>
       "/proyecto <número> — detalle de un proyecto\n" +
       "/playa — sub-proyectos de Propiedades de la Playa\n" +
       (isAdmin(ctx.from.id)
-        ? "/actualizar <número> <avance> [progreso|activo|ganado] — actualiza un proyecto y notifica\n" +
+        ? "/actualizar <número> <avance> [progreso|activo|ganado|perdido] — actualiza un proyecto y notifica\n" +
           "/nuevo Título | Cliente | avance | estado | próximo paso — crea un proyecto\n" +
           "/nota <número> <texto> — actualiza el próximo paso de un proyecto"
         : "")
@@ -238,7 +241,7 @@ bot.action(/^bump_(\d+)_(-?\d+)$/, async (ctx) => {
   notifyUpdate(ctx, project, before);
 });
 
-bot.action(/^estado_(\d+)_(progress|active|won)$/, async (ctx) => {
+bot.action(/^estado_(\d+)_(progress|active|won|lost)$/, async (ctx) => {
   const idx = Number(ctx.match[1]);
   const nuevoEstado = ctx.match[2];
   if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Solo administradores.", { show_alert: true });
@@ -280,7 +283,7 @@ bot.command("actualizar", async (ctx) => {
   const estado = estadoStr ? ESTADOS[estadoStr.toLowerCase()] : undefined;
 
   if (!Number.isInteger(idx) || idx < 0 || idx >= projects.length) {
-    return ctx.reply(`Uso: /actualizar <número> <avance 0-100> [progreso|activo|ganado]\n(número entre 1 y ${projects.length})`);
+    return ctx.reply(`Uso: /actualizar <número> <avance 0-100> [progreso|activo|ganado|perdido]\n(número entre 1 y ${projects.length})`);
   }
   if (!Number.isInteger(avance) || avance < 0 || avance > 100) {
     return ctx.reply("El avance debe ser un número entre 0 y 100.");
@@ -306,7 +309,7 @@ bot.command("nuevo", async (ctx) => {
 
   if (!title || !client || !avanceStr || !estadoStr) {
     return ctx.reply(
-      "Uso: /nuevo Título | Cliente | avance | progreso|activo|ganado | próximo paso (opcional)\n" +
+      "Uso: /nuevo Título | Cliente | avance | progreso|activo|ganado|perdido | próximo paso (opcional)\n" +
         "Ejemplo: /nuevo Renovación de contrato | ACME | 20 | progreso | Enviar propuesta inicial"
     );
   }
@@ -353,6 +356,14 @@ bot.command("nota", async (ctx) => {
 
 bot.launch();
 console.log("Bot de Telegram iniciado.");
+
+// Si Railway (u otro host) asigna un puerto público, levanta también la API
+// de solo lectura que alimenta el dashboard en vivo. Sin PORT, el bot sigue
+// funcionando igual que antes (solo long polling, sin servidor HTTP).
+if (process.env.PORT) {
+  const { startServer } = require("./server");
+  startServer(process.env.PORT);
+}
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
