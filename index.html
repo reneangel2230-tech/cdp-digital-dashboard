@@ -575,6 +575,9 @@
 
     </div>
 
+    <div class="section-title" id="playa-title" style="display:none; margin-top:44px;">🏖️ Propiedades de la Playa (personal)</div>
+    <div class="cards" id="playa-cards"></div>
+
     <footer>CDP Digital · Dashboard interno de seguimiento de proyectos · <strong>Rene Becerra</strong>, Arquitecto de Soluciones MPS & ECM</footer>
   </div>
 
@@ -641,8 +644,8 @@
         .join("");
     }
 
-    function renderCards(projects) {
-      document.getElementById("cards").innerHTML = projects
+    function renderCards(projects, targetId = "cards") {
+      document.getElementById(targetId).innerHTML = projects
         .map((p) => {
           const meta = STATUS_META[p.status];
           const progressLabel = p.status === "lost" ? "Avance alcanzado antes del cierre" : "Avance estimado";
@@ -682,6 +685,11 @@
         renderStackBar(data.projects);
         renderRanking(data.projects);
         renderCards(data.projects);
+
+        if (data.playa && data.playa.length) {
+          renderCards(data.playa, "playa-cards");
+          document.getElementById("playa-title").style.display = "";
+        }
 
         const updated = new Date(data.updatedAt);
         document.getElementById("subtitle").textContent =

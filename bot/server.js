@@ -13,12 +13,14 @@ function startServer(port) {
   const app = express();
   app.use(cors());
 
-  // Solo expone la categoría "cdp": los proyectos "playa" son personales y
-  // nunca deben salir del bot de Telegram.
+  // "metrics"/"projects" son solo de la categoría "cdp" (el negocio). "playa"
+  // se expone aparte, sin mezclarse en esas métricas, para la sección
+  // personal del dashboard — a pedido explícito del dueño de los datos.
   app.get("/api/dashboard", (_req, res) => {
     res.json({
       metrics: getMetrics("cdp"),
       projects: getCategoryProjects("cdp").map(publicProject),
+      playa: getCategoryProjects("playa").map(publicProject),
       updatedAt: new Date().toISOString(),
     });
   });
