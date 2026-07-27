@@ -23,7 +23,7 @@
     "category": "cdp",
     "status": "progress",
     "badge": "En evaluación",
-    "progress": 55,
+    "progress": 85,
     "nextStep": "Dar seguimiento al resultado de la evaluación/adjudicación de la licitación."
   },
   {
@@ -54,13 +54,13 @@
     "nextStep": "Recopilar por entidad el proveedor actual, equipos contratados y vencimiento de arrendamientos, para preparar un nuevo pliego."
   },
   {
-    "title": "Suministros de impresión",
+    "title": "Nueva oportunidad — Suministros de impresión",
     "client": "Novartis",
     "category": "cdp",
-    "status": "lost",
-    "badge": "Cerrado — No aceptado",
-    "progress": 30,
-    "nextStep": "Oportunidad cerrada — el cliente no aceptó la propuesta presentada. Sin próximos pasos."
+    "status": "won",
+    "badge": "Cerrado — Ganado",
+    "progress": 95,
+    "nextStep": "Identificar los artículos y el proveedor correspondiente para preparar la cotización."
   },
   {
     "title": "Hotel",
