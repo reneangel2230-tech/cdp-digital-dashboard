@@ -4,9 +4,9 @@
     "client": "Tzanetatos",
     "category": "cdp",
     "status": "active",
-    "badge": "Propuesta trasladada a comercial",
-    "progress": 70,
-    "nextStep": "Con la cotización del proveedor ya revisada y trasladada al equipo comercial, preparar y enviar la propuesta formal al cliente."
+    "badge": "Cotización recibida",
+    "progress": 60,
+    "nextStep": "Revisar la cotización ya recibida del proveedor y trasladarla al equipo comercial para preparar la propuesta formal al cliente."
   },
   {
     "title": "GavaTracking",
@@ -31,9 +31,9 @@
     "client": "EPA",
     "category": "cdp",
     "status": "progress",
-    "badge": "En seguimiento",
-    "progress": 60,
-    "nextStep": "Ya se definió el responsable interno del proyecto; coordinar y ejecutar la migración del sistema de impresión hacia el nuevo servidor."
+    "badge": "Coordinando responsable",
+    "progress": 55,
+    "nextStep": "Confirmar internamente el equipo responsable de ejecutar la migración del sistema de impresión al nuevo servidor, tras una reunión reciente de coordinación con el cliente."
   },
   {
     "title": "Suministro de equipos (licitación ganada)",
