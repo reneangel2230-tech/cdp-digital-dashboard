@@ -1,0 +1,146 @@
+[
+  {
+    "title": "Cambio de flota de impresión",
+    "client": "Tzanetatos",
+    "category": "cdp",
+    "status": "active",
+    "badge": "Cotización recibida",
+    "progress": 60,
+    "nextStep": "Revisar la cotización ya recibida del proveedor y trasladarla al equipo comercial para preparar la propuesta formal al cliente."
+  },
+  {
+    "title": "GavaTracking",
+    "client": "Super Baru",
+    "category": "cdp",
+    "status": "active",
+    "badge": "Cotización enviada",
+    "progress": 65,
+    "nextStep": "Confirmar que la cotización y el brochure, ya remitidos internamente, fueron entregados al cliente, y dar seguimiento a su respuesta."
+  },
+  {
+    "title": "Convenio Marco — Arrendamiento de Impresoras",
+    "client": "Sector Público (Licitación)",
+    "category": "cdp",
+    "status": "progress",
+    "badge": "En evaluación",
+    "progress": 85,
+    "nextStep": "Dar seguimiento al resultado de la evaluación/adjudicación de la licitación."
+  },
+  {
+    "title": "Migración de sistema de impresión a nuevo servidor",
+    "client": "EPA",
+    "category": "cdp",
+    "status": "progress",
+    "badge": "Coordinando responsable",
+    "progress": 55,
+    "nextStep": "Confirmar internamente el equipo responsable de ejecutar la migración del sistema de impresión al nuevo servidor, tras una reunión reciente de coordinación con el cliente."
+  },
+  {
+    "title": "Suministro de equipos (licitación ganada)",
+    "client": "Cervecería Nacional",
+    "category": "cdp",
+    "status": "won",
+    "badge": "Cerrado — Ganado",
+    "progress": 92,
+    "nextStep": "El pedido ya está en proceso de compra hacia fábrica; dar seguimiento a la fecha de entrega definitiva."
+  },
+  {
+    "title": "Nuevas oportunidades — Clientes de Gobierno",
+    "client": "Sector Público (CSS, Órgano Judicial, Contraloría, Ministerio de Gobierno y Justicia)",
+    "category": "cdp",
+    "status": "progress",
+    "badge": "Recopilando información",
+    "progress": 15,
+    "nextStep": "Recopilar por entidad el proveedor actual, equipos contratados y vencimiento de arrendamientos, para preparar un nuevo pliego."
+  },
+  {
+    "title": "Nueva oportunidad — Suministros de impresión",
+    "client": "Novartis",
+    "category": "cdp",
+    "status": "won",
+    "badge": "Cerrado — Ganado",
+    "progress": 95,
+    "nextStep": "Identificar los artículos y el proveedor correspondiente para preparar la cotización."
+  },
+  {
+    "title": "Hotel",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Plan de inversión listo",
+    "progress": 25,
+    "nextStep": "Resolver brechas antes de iniciar obra — título/permiso municipal, registro ATP, y sobre todo capital de trabajo (3–6 meses de nómina/lanzamiento) además del CAPEX."
+  },
+  {
+    "title": "Catamarán de fondo de vidrio",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Casco identificado, sin evaluar",
+    "progress": 15,
+    "nextStep": "Evaluar el casco (grietas, óxido) antes de invertir y cotizar la ingeniería marina del panel de fondo de vidrio."
+  },
+  {
+    "title": "Ebanistería",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Material en sitio, sin taller",
+    "progress": 20,
+    "nextStep": "Inventariar y curar la teca ya apilada, montar el taller y definir si se vende también a terceros."
+  },
+  {
+    "title": "Vivero Concepción",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Especies definidas, sin infraestructura",
+    "progress": 15,
+    "nextStep": "Delimitar área con mallasombra y riego básico, y confirmar con un experto la especie exacta de la palma."
+  },
+  {
+    "title": "Mantenimiento y Asesoría de Granjas",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Concepto sin catálogo definido",
+    "progress": 10,
+    "nextStep": "Definir catálogo de servicios y tarifas, e identificar clientes potenciales entre fincas vecinas."
+  },
+  {
+    "title": "Casa en el Árbol",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Estructura en pie",
+    "progress": 30,
+    "nextStep": "Inspección estructural del árbol y las uniones primero, luego reforzar escalera y barandas."
+  },
+  {
+    "title": "Cabañas",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Existentes en buen estado",
+    "progress": 35,
+    "nextStep": "Limpieza/pintura/techo de las 2 cabañas existentes; evaluar factibilidad (pilotes, oleaje) de las nuevas sobre el mar."
+  },
+  {
+    "title": "Construcción de Carreteras",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Maquinaria en sitio",
+    "progress": 20,
+    "nextStep": "Encargar estudio de ingeniería vial y priorizar el tramo que conecta con el mar y las fincas más activas."
+  },
+  {
+    "title": "Mina de Manganeso",
+    "client": "Iván de la Guardia",
+    "category": "playa",
+    "status": "progress",
+    "badge": "Piezas identificadas, sin catalogar",
+    "progress": 10,
+    "nextStep": "Documentar y catalogar las piezas antes de mover nada; evaluar ruta turística vs. venta como chatarra."
+  }
+]

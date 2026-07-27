@@ -320,7 +320,8 @@
       <div class="title-block">
         <span class="eyebrow">CDP Digital</span>
         <h1>Proyectos y estado</h1>
-        <p class="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 27 de julio de 2026</p>
+        <p class="subtitle" id="subtitle">Resumen ejecutivo de oportunidades en curso — actualizado el 27 de julio de 2026</p>
+        <p class="subtitle" id="data-source" style="font-size:11px; margin-top:4px;"></p>
         <div class="legend">
           <div class="legend-item"><span class="legend-dot" style="background:var(--amber); box-shadow:0 0 6px var(--amber)"></span>En proceso</div>
           <div class="legend-item"><span class="legend-dot" style="background:var(--teal); box-shadow:0 0 6px var(--teal)"></span>Activo / listo</div>
@@ -336,7 +337,7 @@
           <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
         </div>
         <div>
-          <div class="num">7</div>
+          <div class="num" id="m-active">7</div>
           <div class="label">Proyectos activos</div>
         </div>
       </div>
@@ -345,7 +346,7 @@
           <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6M9 17h6M9 9h2"/></svg>
         </div>
         <div>
-          <div class="num">3</div>
+          <div class="num" id="m-quoting">3</div>
           <div class="label">En proceso de cotización</div>
         </div>
       </div>
@@ -354,7 +355,7 @@
           <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m5-4.13a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm6 4a4 4 0 0 0-8 0"/><circle cx="9" cy="7" r="4"/></svg>
         </div>
         <div>
-          <div class="num">7</div>
+          <div class="num" id="m-clients">7</div>
           <div class="label">Clientes involucrados</div>
         </div>
       </div>
@@ -363,7 +364,7 @@
     <div class="chart-card">
       <div>
         <div class="chart-block-title">Distribución de proyectos por estado</div>
-        <div class="stack-bar">
+        <div class="stack-bar" id="stack-bar">
           <div class="stack-seg amber" style="width:calc(42.86% - 2px)"></div>
           <div class="stack-gap"></div>
           <div class="stack-seg teal" style="width:calc(28.57% - 2px)"></div>
@@ -372,7 +373,7 @@
           <div class="stack-gap"></div>
           <div class="stack-seg red" style="width:calc(14.29% - 2px)"></div>
         </div>
-        <div class="chart-legend">
+        <div class="chart-legend" id="chart-legend">
           <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--amber); box-shadow:0 0 6px var(--amber)"></span>En proceso — <strong>3</strong></div>
           <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--teal); box-shadow:0 0 6px var(--teal)"></span>Activo / listo — <strong>2</strong></div>
           <div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--green); box-shadow:0 0 6px var(--green)"></span>Cerrado y ganado — <strong>1</strong></div>
@@ -382,6 +383,7 @@
 
       <div>
         <div class="chart-block-title">Avance por proyecto</div>
+        <div id="ranking">
         <div class="rank-row">
           <div class="rank-label">Suministro — Cervecería Nacional</div>
           <div class="rank-track"><div class="rank-fill" style="width:92%"></div></div>
@@ -417,11 +419,12 @@
           <div class="rank-track"><div class="rank-fill" style="width:15%"></div></div>
           <div class="rank-value">15%</div>
         </div>
+        </div>
       </div>
     </div>
 
     <div class="section-title">Oportunidades en curso</div>
-    <div class="cards">
+    <div class="cards" id="cards">
 
       <div class="card st-active">
         <div class="card-top">
@@ -771,5 +774,127 @@
 
     <footer>CDP Digital · Dashboard interno de seguimiento de proyectos · <strong>Rene Becerra</strong>, Arquitecto de Soluciones MPS & ECM</footer>
   </div>
+
+  <script>
+    // URL pública del bot de Telegram (Railway → Settings → Networking →
+    // "Generate Domain"). Déjalo vacío para que el dashboard se quede con el
+    // contenido estático de arriba (última actualización manual).
+    const DASHBOARD_API_URL = "https://cdp-digital-dashboard-production.up.railway.app";
+
+    const STATUS_META = {
+      progress: { label: "En proceso", dot: "amber", seg: "amber", iconClass: "" },
+      active:   { label: "Activo / listo", dot: "teal", seg: "teal", iconClass: "teal" },
+      won:      { label: "Cerrado y ganado", dot: "green", seg: "green", iconClass: "green" },
+      lost:     { label: "Cerrado — no aceptado", dot: "red", seg: "red", iconClass: "red" },
+    };
+
+    const STATUS_ICON = {
+      progress: '<path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6M9 17h6M9 9h2"/>',
+      active: '<path stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/>',
+      won: '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/>',
+      lost: '<circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 9l-6 6M9 9l6 6"/>',
+    };
+
+    function renderMetrics(m) {
+      document.getElementById("m-active").textContent = m.proyectosActivos;
+      document.getElementById("m-quoting").textContent = m.enProcesoCotizacion;
+      document.getElementById("m-clients").textContent = m.clientesInvolucrados;
+    }
+
+    function renderStackBar(projects) {
+      const order = ["progress", "active", "won", "lost"];
+      const counts = Object.fromEntries(order.map((s) => [s, 0]));
+      projects.forEach((p) => counts[p.status]++);
+      const total = projects.length || 1;
+      const present = order.filter((s) => counts[s] > 0);
+
+      const bar = document.getElementById("stack-bar");
+      bar.innerHTML = present
+        .map((s, i) => {
+          const pct = (counts[s] / total) * 100;
+          const gap = i < present.length - 1 ? " - 2px" : "";
+          return `<div class="stack-seg ${STATUS_META[s].seg}" style="width:calc(${pct}%${gap})"></div>` +
+            (i < present.length - 1 ? '<div class="stack-gap"></div>' : "");
+        })
+        .join("");
+
+      const legendLabel = { progress: "En proceso", active: "Activo / listo", won: "Cerrado y ganado", lost: "Cerrado — no aceptado" };
+      document.getElementById("chart-legend").innerHTML = present
+        .map((s) => `<div class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--${STATUS_META[s].dot}); box-shadow:0 0 6px var(--${STATUS_META[s].dot})"></span>${legendLabel[s]} — <strong>${counts[s]}</strong></div>`)
+        .join("");
+    }
+
+    function renderRanking(projects) {
+      const sorted = [...projects].sort((a, b) => b.progress - a.progress);
+      document.getElementById("ranking").innerHTML = sorted
+        .map(
+          (p) => `
+        <div class="rank-row">
+          <div class="rank-label">${p.title} — ${p.client}</div>
+          <div class="rank-track"><div class="rank-fill" style="width:${p.progress}%"></div></div>
+          <div class="rank-value">${p.progress}%</div>
+        </div>`
+        )
+        .join("");
+    }
+
+    function renderCards(projects, targetId = "cards") {
+      document.getElementById(targetId).innerHTML = projects
+        .map((p) => {
+          const meta = STATUS_META[p.status];
+          const progressLabel = p.status === "lost" ? "Avance alcanzado antes del cierre" : "Avance estimado";
+          return `
+      <div class="card st-${p.status}">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge ${meta.iconClass}">
+              <svg viewBox="0 0 24 24">${STATUS_ICON[p.status]}</svg>
+            </div>
+            <div>
+              <div class="card-title">${p.title}</div>
+              <div class="card-client">Cliente: ${p.client}</div>
+            </div>
+          </div>
+          <span class="badge ${p.status}">${p.badge}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${p.progress}%"></div></div>
+        <div class="bar-label">${progressLabel}: ${p.progress}%</div>
+        <div class="next-step">
+          <strong>Próximo paso</strong>
+          ${p.nextStep}
+        </div>
+      </div>`;
+        })
+        .join("");
+    }
+
+    async function loadLiveData() {
+      if (!DASHBOARD_API_URL) return;
+      try {
+        const res = await fetch(`${DASHBOARD_API_URL}/api/dashboard`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        renderMetrics(data.metrics);
+        renderStackBar(data.projects);
+        renderRanking(data.projects);
+        renderCards(data.projects);
+
+        const updated = new Date(data.updatedAt);
+        document.getElementById("subtitle").textContent =
+          "Resumen ejecutivo de oportunidades en curso — datos en vivo desde el bot de Telegram";
+        document.getElementById("data-source").textContent =
+          `🟢 Conectado al bot · actualizado ${updated.toLocaleString("es-PA", { dateStyle: "long", timeStyle: "short" })}`;
+        document.getElementById("data-source").style.color = "var(--teal)";
+      } catch (err) {
+        document.getElementById("data-source").textContent =
+          "⚪ Sin conexión al bot — mostrando la última actualización manual del dashboard";
+        document.getElementById("data-source").style.color = "var(--text-3)";
+        console.warn("No se pudo cargar el dashboard en vivo:", err.message);
+      }
+    }
+
+    loadLiveData();
+  </script>
 </body>
 </html>
