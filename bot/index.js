@@ -1,6 +1,17 @@
 require("dotenv").config();
 const { Telegraf, Markup } = require("telegraf");
-const { STATUS, getProjects, getCategoryProjects, getMetrics, updateProject, addProject } = require("./data");
+const {
+  STATUS,
+  getProjects,
+  getCategoryProjects,
+  getMetrics,
+  updateProject,
+  addProject,
+  setFinancials,
+  setDates,
+  getInvestmentSummary,
+  getTimeline,
+} = require("./data");
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 if (!token) {
@@ -140,7 +151,49 @@ function mainMenuKeyboard() {
   return Markup.inlineKeyboard([
     [Markup.button.callback("📊 Resumen", "resumen")],
     [Markup.button.callback("📋 CDP Digital", "listar"), Markup.button.callback("🏖️ Playa", "listar_playa")],
+    [Markup.button.callback("💰 Inversión (Playa)", "inversion"), Markup.button.callback("🗓️ Cronograma", "cronograma")],
   ]);
+}
+
+function formatUSD(n) {
+  return `$${Math.round(n).toLocaleString("en-US")}`;
+}
+
+function formatInvestmentLine(project, index) {
+  let line = `${index}. *${project.title}*\n   Inversión: ${project.investment}`;
+  if (project.roi) line += `\n   ROI: ${project.roi}`;
+  if (project.payback) line += `\n   Payback: ${project.payback}`;
+  return line;
+}
+
+function inversionText() {
+  const { projects, approxTotal } = getInvestmentSummary("playa");
+  if (!projects.length) {
+    return "💰 *Inversión — Playa*\n\nTodavía no hay montos cargados. Usa /finanzas para agregarlos.";
+  }
+  const lines = projects.map(({ project, index }) => formatInvestmentLine(project, index + 1));
+  return (
+    "💰 *Inversión — Propiedades de la Playa*\n\n" +
+    lines.join("\n\n") +
+    `\n\n_Total estimado: ~${formatUSD(approxTotal)} (aproximado — varios montos son rangos o tienen más de una partida)_`
+  );
+}
+
+function formatTimelineLine(project, index) {
+  const start = project.startDate || "sin definir";
+  const target = project.targetDate || "sin definir";
+  return `${index}. *${project.title}*\n   Cliente: ${project.client}\n   Inicio: ${start} · Objetivo: ${target}`;
+}
+
+function cronogramaText(category) {
+  const label = category === "playa" ? "Playa" : "CDP Digital";
+  const timeline = getTimeline(category);
+  if (!timeline.length) return `🗓️ *Cronograma — ${label}*\n\nNo hay proyectos en esta categoría.`;
+  const lines = timeline.map(({ project, index }) => formatTimelineLine(project, index + 1));
+  const sinFecha = timeline.filter(({ project }) => !project.targetDate).length;
+  let text = `🗓️ *Cronograma — ${label}*\n\n` + lines.join("\n\n");
+  if (sinFecha) text += `\n\n_${sinFecha} proyecto(s) sin fecha objetivo definida. Usa /fecha para cargarlas._`;
+  return text;
 }
 
 bot.start((ctx) =>
@@ -170,10 +223,14 @@ bot.help((ctx) =>
       "/proyectos — lista de todos los proyectos (con botones)\n" +
       "/proyecto <número> — detalle de un proyecto\n" +
       "/playa — sub-proyectos de Propiedades de la Playa\n" +
+      "/inversion — monto, ROI y payback de los proyectos de Playa\n" +
+      "/cronograma [playa] — proyectos con fecha de inicio/objetivo (CDP por defecto)\n" +
       (isAdmin(ctx.from.id)
         ? "/actualizar <número> <avance> [progreso|activo|ganado|perdido] — actualiza un proyecto y notifica\n" +
           "/nuevo Título | Cliente | avance | estado | próximo paso — crea un proyecto\n" +
-          "/nota <número> <texto> — actualiza el próximo paso de un proyecto"
+          "/nota <número> <texto> — actualiza el próximo paso de un proyecto\n" +
+          "/finanzas <número> | <inversión> | <ROI> | <payback opcional> — carga datos financieros (Playa)\n" +
+          "/fecha <número> <inicio:YYYY-MM-DD> <objetivo:YYYY-MM-DD> — carga fechas de un proyecto"
         : "")
   )
 );
@@ -257,6 +314,24 @@ bot.action(/^estado_(\d+)_(progress|active|won|lost)$/, async (ctx) => {
     .editMessageText(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard })
     .catch(() => ctx.reply(formatProject(project, idx + 1), { parse_mode: "Markdown", ...keyboard }));
   notifyUpdate(ctx, project, before);
+});
+
+bot.command("inversion", (ctx) => ctx.reply(inversionText(), { parse_mode: "Markdown" }));
+
+bot.action("inversion", async (ctx) => {
+  await ctx.answerCbQuery();
+  ctx.reply(inversionText(), { parse_mode: "Markdown" });
+});
+
+bot.command("cronograma", (ctx) => {
+  const arg = ctx.message.text.split(" ").slice(1).join(" ").trim().toLowerCase();
+  const category = arg === "playa" ? "playa" : "cdp";
+  ctx.reply(cronogramaText(category), { parse_mode: "Markdown" });
+});
+
+bot.action("cronograma", async (ctx) => {
+  await ctx.answerCbQuery();
+  ctx.reply(cronogramaText("cdp"), { parse_mode: "Markdown" });
 });
 
 bot.command("proyecto", (ctx) => {
@@ -352,6 +427,51 @@ bot.command("nota", async (ctx) => {
 
   const { project } = updateProject(idx, { nextStep: texto });
   ctx.reply(`✅ Próximo paso actualizado:\n\n${formatProject(project, idx + 1)}`, { parse_mode: "Markdown" });
+});
+
+bot.command("finanzas", async (ctx) => {
+  if (!requireAdmin(ctx)) return;
+
+  const raw = ctx.message.text.split(" ").slice(1).join(" ");
+  const parts = raw.split("|").map((s) => s.trim());
+  const [numStr, investment, roi, payback] = parts;
+  const projects = getProjects();
+  const idx = parseInt(numStr, 10) - 1;
+
+  if (!Number.isInteger(idx) || idx < 0 || idx >= projects.length || !investment) {
+    return ctx.reply(
+      `Uso: /finanzas <número> | <inversión> | <ROI> | <payback opcional>\n` +
+        "Ejemplo: /finanzas 8 | $154,000 | ~50%/año | ~2.0 años\n" +
+        `(número entre 1 y ${projects.length})`
+    );
+  }
+
+  const project = setFinancials(idx, { investment, roi, payback });
+  ctx.reply(`✅ Datos financieros actualizados:\n\n${formatInvestmentLine(project, idx + 1)}`, { parse_mode: "Markdown" });
+});
+
+bot.command("fecha", async (ctx) => {
+  if (!requireAdmin(ctx)) return;
+
+  const args = ctx.message.text.split(" ").slice(1);
+  const [numStr, startDate, targetDate] = args;
+  const projects = getProjects();
+  const idx = parseInt(numStr, 10) - 1;
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+  if (!Number.isInteger(idx) || idx < 0 || idx >= projects.length || !startDate || !targetDate) {
+    return ctx.reply(
+      `Uso: /fecha <número> <inicio:YYYY-MM-DD> <objetivo:YYYY-MM-DD>\n` +
+        "Ejemplo: /fecha 1 2026-06-01 2026-09-30\n" +
+        `(número entre 1 y ${projects.length})`
+    );
+  }
+  if (!dateRegex.test(startDate) || !dateRegex.test(targetDate)) {
+    return ctx.reply("Las fechas deben tener formato YYYY-MM-DD, ej. 2026-09-30.");
+  }
+
+  const project = setDates(idx, { startDate, targetDate });
+  ctx.reply(`✅ Fechas actualizadas:\n\n${formatTimelineLine(project, idx + 1)}`, { parse_mode: "Markdown" });
 });
 
 bot.launch();

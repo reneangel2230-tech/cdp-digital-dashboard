@@ -69,6 +69,9 @@
     "status": "progress",
     "badge": "Plan de inversión listo",
     "progress": 25,
+    "investment": "$154,000",
+    "roi": "~50%/año",
+    "payback": "~2.0 años",
     "nextStep": "Resolver brechas antes de iniciar obra — título/permiso municipal, registro ATP, y sobre todo capital de trabajo (3–6 meses de nómina/lanzamiento) además del CAPEX."
   },
   {
@@ -78,6 +81,9 @@
     "status": "progress",
     "badge": "Casco identificado, sin evaluar",
     "progress": 15,
+    "investment": "$35,000",
+    "roi": "~59%/año",
+    "payback": "~1.7 años",
     "nextStep": "Evaluar el casco (grietas, óxido) antes de invertir y cotizar la ingeniería marina del panel de fondo de vidrio."
   },
   {
@@ -87,6 +93,9 @@
     "status": "progress",
     "badge": "Material en sitio, sin taller",
     "progress": 20,
+    "investment": "$11,500",
+    "roi": "~52%/año",
+    "payback": "~1.9 años",
     "nextStep": "Inventariar y curar la teca ya apilada, montar el taller y definir si se vende también a terceros."
   },
   {
@@ -96,6 +105,9 @@
     "status": "progress",
     "badge": "Especies definidas, sin infraestructura",
     "progress": 15,
+    "investment": "$15,000",
+    "roi": "~50%/año",
+    "payback": "~2.0 años",
     "nextStep": "Delimitar área con mallasombra y riego básico, y confirmar con un experto la especie exacta de la palma."
   },
   {
@@ -105,6 +117,9 @@
     "status": "progress",
     "badge": "Concepto sin catálogo definido",
     "progress": 10,
+    "investment": "$4,500",
+    "roi": "~128%/año",
+    "payback": "~0.8 años",
     "nextStep": "Definir catálogo de servicios y tarifas, e identificar clientes potenciales entre fincas vecinas."
   },
   {
@@ -114,6 +129,9 @@
     "status": "progress",
     "badge": "Estructura en pie",
     "progress": 30,
+    "investment": "$2,200–$4,000",
+    "roi": "~136%/año (si se renta)",
+    "payback": "~0.7 años",
     "nextStep": "Inspección estructural del árbol y las uniones primero, luego reforzar escalera y barandas."
   },
   {
@@ -123,6 +141,9 @@
     "status": "progress",
     "badge": "Existentes en buen estado",
     "progress": 35,
+    "investment": "Existentes $2,500–$4,800 · Nuevas sobre el mar $65,000",
+    "roi": "Existentes ~192%/año · Nuevas ~16%/año",
+    "payback": "Existentes ~0.6 años · Nuevas ~6.2 años",
     "nextStep": "Limpieza/pintura/techo de las 2 cabañas existentes; evaluar factibilidad (pilotes, oleaje) de las nuevas sobre el mar."
   },
   {
@@ -132,6 +153,8 @@
     "status": "progress",
     "badge": "Maquinaria en sitio",
     "progress": 20,
+    "investment": "$80,000–$250,000 (muy preliminar)",
+    "roi": "sin ROI propio (infraestructura habilitante)",
     "nextStep": "Encargar estudio de ingeniería vial y priorizar el tramo que conecta con el mar y las fincas más activas."
   },
   {
@@ -141,6 +164,8 @@
     "status": "progress",
     "badge": "Piezas identificadas, sin catalogar",
     "progress": 10,
+    "investment": "$5,000–$15,000",
+    "roi": "sin ROI propio (atractivo turístico complementario)",
     "nextStep": "Documentar y catalogar las piezas antes de mover nada; evaluar ruta turística vs. venta como chatarra."
   }
 ]

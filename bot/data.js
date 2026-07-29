@@ -62,6 +62,66 @@ function updateProject(index, { progress, status, nextStep }) {
   return { project, before };
 }
 
+function setFinancials(index, { investment, roi, payback }) {
+  const projects = getProjects();
+  const project = projects[index];
+  if (!project) throw new Error("Proyecto no encontrado");
+  project.investment = investment;
+  project.roi = roi;
+  if (payback !== undefined) project.payback = payback;
+  saveProjects(projects);
+  return project;
+}
+
+function setDates(index, { startDate, targetDate }) {
+  const projects = getProjects();
+  const project = projects[index];
+  if (!project) throw new Error("Proyecto no encontrado");
+  project.startDate = startDate;
+  project.targetDate = targetDate;
+  saveProjects(projects);
+  return project;
+}
+
+// Los montos son texto libre (a veces rangos, ej. "$2,200–$4,000", o dos
+// partidas como Cabañas) porque así están documentados — no se inventan
+// cifras únicas donde la fuente da un rango. "Total estimado" promedia los
+// números que aparezcan en cada texto, así que es aproximado por diseño.
+function parseApproxAmount(str) {
+  if (!str) return undefined;
+  const nums = [...str.matchAll(/[\d,]+(?:\.\d+)?/g)].map((m) => parseFloat(m[0].replace(/,/g, "")));
+  if (!nums.length) return undefined;
+  return nums.reduce((a, b) => a + b, 0) / nums.length;
+}
+
+function parseFirstNumber(str) {
+  if (!str) return undefined;
+  const match = str.match(/[\d.]+/);
+  return match ? parseFloat(match[0]) : undefined;
+}
+
+function getInvestmentSummary(category = "playa") {
+  const projects = getProjects()
+    .map((project, index) => ({ project, index }))
+    .filter(({ project }) => (project.category || "cdp") === category && project.investment);
+  const sorted = [...projects].sort((a, b) => {
+    const pa = parseFirstNumber(a.project.payback) ?? Infinity;
+    const pb = parseFirstNumber(b.project.payback) ?? Infinity;
+    return pa - pb;
+  });
+  const approxTotal = sorted.reduce((sum, { project }) => sum + (parseApproxAmount(project.investment) ?? 0), 0);
+  return { projects: sorted, approxTotal };
+}
+
+function getTimeline(category = "cdp") {
+  const projects = getCategoryProjects(category);
+  return [...projects].sort((a, b) => {
+    const ta = a.project.targetDate ?? "9999-99-99";
+    const tb = b.project.targetDate ?? "9999-99-99";
+    return ta.localeCompare(tb);
+  });
+}
+
 function addProject({ title, client, progress, status, badge, nextStep, category = "cdp" }) {
   const projects = getProjects();
   const project = {
@@ -78,4 +138,15 @@ function addProject({ title, client, progress, status, badge, nextStep, category
   return { project, index: projects.length - 1 };
 }
 
-module.exports = { STATUS, getProjects, getCategoryProjects, getMetrics, updateProject, addProject };
+module.exports = {
+  STATUS,
+  getProjects,
+  getCategoryProjects,
+  getMetrics,
+  updateProject,
+  addProject,
+  setFinancials,
+  setDates,
+  getInvestmentSummary,
+  getTimeline,
+};
