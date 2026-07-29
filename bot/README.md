@@ -37,8 +37,20 @@ npm start
 - `/proyecto <número>` — detalle de un proyecto puntual
 - `/playa` — sub-proyectos de *Propiedades de la Playa* (categoría separada,
   no cuenta en `/resumen` ni en la lista de `/proyectos`)
+- `/inversion` — monto invertido, ROI y payback de cada proyecto de Playa,
+  ordenados por el payback más corto, con un total estimado (aproximado,
+  porque varios montos son rangos o tienen más de una partida)
+- `/cronograma [playa]` — proyectos con su fecha de inicio y fecha objetivo,
+  ordenados por la más próxima. Sin argumento muestra los de CDP Digital
 - `/actualizar <número> <avance> [progreso|activo|ganado|perdido]` — solo administradores;
   actualiza el avance/estado de un proyecto y notifica el cambio
+- `/finanzas <número> | <inversión> | <ROI> | <payback opcional>` — solo
+  administradores; carga los datos que muestra `/inversion` para un proyecto
+  (ej. `/finanzas 8 | $154,000 | ~50%/año | ~2.0 años`)
+- `/fecha <número> <inicio:YYYY-MM-DD> <objetivo:YYYY-MM-DD>` — solo
+  administradores; carga las fechas que muestra `/cronograma` para un proyecto
+
+El resto de comandos de administrador (`/nuevo`, `/nota`) aparecen en `/help`.
 
 ## Restringir quién puede usar el bot
 
