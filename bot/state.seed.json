@@ -67,12 +67,12 @@
     "client": "Iván de la Guardia",
     "category": "playa",
     "status": "progress",
-    "badge": "Plan de inversión listo",
-    "progress": 25,
-    "investment": "$154,000",
-    "roi": "~50%/año",
-    "payback": "~2.0 años",
-    "nextStep": "Resolver brechas antes de iniciar obra — título/permiso municipal, registro ATP, y sobre todo capital de trabajo (3–6 meses de nómina/lanzamiento) además del CAPEX."
+    "badge": "Costo real confirmado — brechas sin resolver",
+    "progress": 20,
+    "investment": "$20,000",
+    "roi": "~383%/año",
+    "payback": "~0.3 años",
+    "nextStep": "Resolver antes de iniciar obra: título/permiso municipal, registro ATP, tratamiento de aguas residuales y sobre todo capital de trabajo (3–6 meses de nómina/lanzamiento) además del CAPEX. Falta confirmar si $20,000 cubre las 4 fases o solo una parte."
   },
   {
     "title": "Catamarán de fondo de vidrio",
@@ -81,9 +81,9 @@
     "status": "progress",
     "badge": "Casco identificado, sin evaluar",
     "progress": 15,
-    "investment": "$35,000",
-    "roi": "~59%/año",
-    "payback": "~1.7 años",
+    "investment": "$2,000",
+    "roi": "~1,030%/año",
+    "payback": "~0.1 años",
     "nextStep": "Evaluar el casco (grietas, óxido) antes de invertir y cotizar la ingeniería marina del panel de fondo de vidrio."
   },
   {
@@ -93,9 +93,9 @@
     "status": "progress",
     "badge": "Material en sitio, sin taller",
     "progress": 20,
-    "investment": "$11,500",
-    "roi": "~52%/año",
-    "payback": "~1.9 años",
+    "investment": "$5,000",
+    "roi": "~120%/año",
+    "payback": "~0.8 años",
     "nextStep": "Inventariar y curar la teca ya apilada, montar el taller y definir si se vende también a terceros."
   },
   {
@@ -103,12 +103,12 @@
     "client": "Iván de la Guardia",
     "category": "playa",
     "status": "progress",
-    "badge": "Especies definidas, sin infraestructura",
-    "progress": 15,
+    "badge": "Catálogo y sitio web en progreso",
+    "progress": 30,
     "investment": "$15,000",
     "roi": "~50%/año",
     "payback": "~2.0 años",
-    "nextStep": "Delimitar área con mallasombra y riego básico, y confirmar con un experto la especie exacta de la palma."
+    "nextStep": "Confirmar precios de las 6 especies restantes, foto real de coco playero y el endpoint de Formspree antes de publicar el sitio."
   },
   {
     "title": "Mantenimiento y Asesoría de Granjas",
@@ -127,12 +127,12 @@
     "client": "Iván de la Guardia",
     "category": "playa",
     "status": "progress",
-    "badge": "Estructura en pie",
+    "badge": "Costo real confirmado",
     "progress": 30,
-    "investment": "$2,200–$4,000",
-    "roi": "~136%/año (si se renta)",
-    "payback": "~0.7 años",
-    "nextStep": "Inspección estructural del árbol y las uniones primero, luego reforzar escalera y barandas."
+    "investment": "$2,509",
+    "roi": "~168%/año",
+    "payback": "~0.6 años",
+    "nextStep": "Inspección estructural del árbol y las uniones primero (seguridad), luego reforzar escalera, techo y acabados."
   },
   {
     "title": "Cabañas",
@@ -140,11 +140,11 @@
     "category": "playa",
     "status": "progress",
     "badge": "Existentes en buen estado",
-    "progress": 35,
-    "investment": "Existentes $2,500–$4,800 · Nuevas sobre el mar $65,000",
-    "roi": "Existentes ~192%/año · Nuevas ~16%/año",
-    "payback": "Existentes ~0.6 años · Nuevas ~6.2 años",
-    "nextStep": "Limpieza/pintura/techo de las 2 cabañas existentes; evaluar factibilidad (pilotes, oleaje) de las nuevas sobre el mar."
+    "progress": 30,
+    "investment": "Existente $1,500 · Nuevas (5 × $2,000) $10,000",
+    "roi": "Existente ~468%/año · Nuevas ~527%/año (escalado a 5 unidades)",
+    "payback": "Existente ~0.2 años · Nuevas ~0.2 años",
+    "nextStep": "Limpieza/reparación de techo y pintura de la cabaña existente; evaluar factibilidad técnica (pilotes, resistencia al oleaje) antes de presupuestar las nuevas — $2,000/unidad parece bajo para construir sobre el agua."
   },
   {
     "title": "Construcción de Carreteras",
