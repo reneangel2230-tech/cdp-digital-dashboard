@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propiedades de la Playa — Estado de sub-proyectos</title>
+<style>
+  :root{
+    --bg-1:#05040f;
+    --bg-2:#0b2a2a;
+    --bg-3:#0d4d3c;
+    --gold:#ffd166;
+    --amber:#ffb020;
+    --teal:#1de9b6;
+    --cyan:#00e5ff;
+    --green:#22c55e;
+    --sand:#e8c27a;
+    --card-bg:rgba(255,255,255,0.055);
+    --card-bg-hover:rgba(255,255,255,0.085);
+    --card-border:rgba(255,255,255,0.14);
+    --text-1:#f8f7ff;
+    --text-2:#c3bce3;
+    --text-3:#9089b8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"Segoe UI",-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 12% -5%, rgba(255,209,102,0.20), transparent 42%),
+      radial-gradient(circle at 92% 10%, rgba(0,229,255,0.18), transparent 42%),
+      radial-gradient(circle at 50% 115%, rgba(29,233,182,0.16), transparent 45%),
+      linear-gradient(160deg,var(--bg-1),var(--bg-2) 52%,var(--bg-3));
+    background-attachment:fixed;
+    color:var(--text-1);
+    min-height:100vh;
+    padding:56px 24px 80px;
+  }
+  .wrap{max-width:980px; margin:0 auto;}
+
+  header{margin-bottom:44px; display:flex; flex-direction:column; gap:22px;}
+  .brand-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;}
+  .logo-chip{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:15px; font-weight:700; color:var(--bg-1);
+    background:linear-gradient(135deg,var(--gold),var(--sand));
+    border-radius:16px; padding:12px 20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.45);
+  }
+  .byline{text-align:right; font-size:13px; color:var(--text-2); line-height:1.6;}
+  .byline strong{color:var(--text-1); font-weight:700;}
+
+  .title-block{
+    position:relative; padding:28px 32px; border-radius:22px;
+    background:linear-gradient(135deg, rgba(255,209,102,0.14), rgba(0,229,255,0.08) 55%, rgba(29,233,182,0.14));
+    border:1px solid rgba(255,255,255,0.10);
+    overflow:hidden;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; font-weight:700; letter-spacing:.10em; text-transform:uppercase;
+    color:var(--gold);
+    background:rgba(255,209,102,0.14);
+    border:1px solid rgba(255,209,102,0.45);
+    padding:5px 14px; border-radius:999px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--gold); box-shadow:0 0 8px var(--gold);}
+  h1{font-size:36px; font-weight:800; margin-bottom:10px; letter-spacing:-.01em; background:linear-gradient(90deg,var(--gold),var(--teal) 60%,var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .subtitle{color:var(--text-2); font-size:15px; max-width:60ch;}
+  .note-box{
+    margin-top:18px; font-size:12.5px; color:var(--text-3); line-height:1.6;
+    background:rgba(255,255,255,0.04); border-left:3px solid var(--gold);
+    padding:10px 16px; border-radius:8px; max-width:70ch;
+  }
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:18px; margin:36px 0 48px;}
+  .metric{
+    position:relative; background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:18px; padding:22px 24px; backdrop-filter:blur(8px);
+    display:flex; align-items:center; gap:16px;
+  }
+  .metric::before{content:""; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--gold),var(--teal),var(--cyan));}
+  .metric-icon{
+    width:46px; height:46px; min-width:46px; border-radius:13px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,var(--gold),var(--amber));
+    box-shadow:0 6px 18px rgba(255,176,32,0.35);
+  }
+  .metric-icon.teal{background:linear-gradient(135deg,var(--teal),var(--cyan)); box-shadow:0 6px 18px rgba(0,229,255,0.35);}
+  .metric-icon svg{width:22px; height:22px; stroke:#05040f; fill:none; stroke-width:2;}
+  .metric .num{font-size:26px; font-weight:800; line-height:1; color:var(--text-1);}
+  .metric .label{font-size:12.5px; color:var(--text-2); margin-top:5px; font-weight:600;}
+
+  .section-title{display:flex; align-items:center; gap:10px; font-size:19px; font-weight:700; margin-bottom:22px;}
+  .section-title::before{content:""; width:5px; height:22px; border-radius:4px; background:linear-gradient(180deg,var(--gold),var(--cyan));}
+
+  .cards{display:flex; flex-direction:column; gap:20px; margin-bottom:44px;}
+  .card{
+    position:relative; background:var(--card-bg); border:1px solid var(--card-border);
+    border-left:4px solid var(--teal); border-radius:20px;
+    padding:26px 28px 26px 26px; backdrop-filter:blur(8px);
+  }
+  .card.st-early{border-left-color:var(--amber);}
+  .card.st-mid{border-left-color:var(--teal);}
+  .card.st-infra{border-left-color:var(--cyan);}
+
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;}
+  .card-heading{display:flex; align-items:center; gap:15px;}
+  .icon-badge{
+    width:46px; height:46px; min-width:46px; border-radius:13px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,var(--gold),var(--amber));
+    box-shadow:0 6px 16px rgba(255,176,32,0.3);
+  }
+  .icon-badge.teal{background:linear-gradient(135deg,var(--teal),var(--cyan)); box-shadow:0 6px 16px rgba(0,229,255,0.3);}
+  .icon-badge.cyan{background:linear-gradient(135deg,var(--cyan),#0891b2); box-shadow:0 6px 16px rgba(0,229,255,0.3);}
+  .icon-badge svg{width:24px; height:24px; stroke:#05040f; fill:none; stroke-width:2;}
+  .card-title{font-size:19px; font-weight:700; margin-bottom:4px;}
+  .card-client{font-size:13px; color:var(--text-2);}
+
+  .badge{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:6px 14px; border-radius:999px; white-space:nowrap;}
+  .badge::before{content:""; width:6px; height:6px; border-radius:50%;}
+  .badge.early{background:rgba(255,176,32,0.16); color:var(--amber); border:1px solid rgba(255,176,32,0.45);}
+  .badge.early::before{background:var(--amber); box-shadow:0 0 6px var(--amber);}
+  .badge.mid{background:rgba(29,233,182,0.16); color:var(--teal); border:1px solid rgba(29,233,182,0.45);}
+  .badge.mid::before{background:var(--teal); box-shadow:0 0 6px var(--teal);}
+  .badge.infra{background:rgba(0,229,255,0.16); color:var(--cyan); border:1px solid rgba(0,229,255,0.45);}
+  .badge.infra::before{background:var(--cyan); box-shadow:0 0 6px var(--cyan);}
+
+  .bar-track{position:relative; width:100%; height:9px; background:rgba(255,255,255,0.09); border-radius:999px; margin:20px 0 8px; overflow:hidden;}
+  .bar-fill{position:relative; height:100%; border-radius:999px; background:linear-gradient(90deg,var(--gold),var(--teal),var(--cyan)); box-shadow:0 0 10px rgba(255,209,102,0.45);}
+  .bar-label{font-size:12px; color:var(--text-2); margin-bottom:18px; font-weight:600;}
+
+  .roi-row{display:flex; flex-wrap:wrap; gap:10px 22px; font-size:12.5px; color:var(--text-2); margin-bottom:14px;}
+  .roi-row strong{color:var(--text-1);}
+
+  .next-step{font-size:14px; line-height:1.5; color:var(--text-1); background:rgba(255,255,255,0.045); border-left:3px solid var(--cyan); padding:14px 18px; border-radius:10px;}
+  .next-step strong{color:var(--cyan); font-weight:700; display:block; font-size:11px; text-transform:uppercase; letter-spacing:.07em; margin-bottom:5px;}
+
+  .links{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:44px;}
+  .link-chip{
+    display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600;
+    color:var(--text-1); text-decoration:none;
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:999px;
+    padding:10px 18px; transition:background .2s ease;
+  }
+  .link-chip:hover{background:var(--card-bg-hover);}
+
+  footer{margin-top:60px; padding-top:26px; text-align:center; color:var(--text-3); font-size:12px; border-top:1px solid rgba(255,255,255,0.10);}
+  footer strong{color:var(--text-2);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand-row">
+        <div class="logo-chip">🌴 Propiedades de la Playa</div>
+        <div class="byline">
+          Preparado por<br>
+          <strong>Rene Becerra</strong> · Arquitecto de IA y Automatización de Procesos, CDP Digital
+        </div>
+      </div>
+      <div class="title-block">
+        <span class="eyebrow">Proyecto personal — Iván de la Guardia</span>
+        <h1>Estado de sub-proyectos</h1>
+        <p class="subtitle" id="subtitle">Vista única de los 9 sub-proyectos de restauración y desarrollo en Playa/Colón — inversión, ROI y próximos pasos. Actualizado el 30 de julio de 2026.</p>
+        <p class="subtitle" id="data-source" style="font-size:11px; margin-top:4px;"></p>
+        <div class="note-box">
+          Los costos son cifras reales dadas por Rene (2026-07-19/28). La utilidad neta anual y el ROI siguen siendo <strong>supuestos ilustrativos sin validar</strong> — ajustar cuando haya tarifas/ocupación/ventas reales. Ver detalle completo en la nota <em>Propiedades de la Playa</em> de MiCerebro.
+        </div>
+      </div>
+    </header>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></svg></div>
+        <div><div class="num">9</div><div class="label">Sub-proyectos</div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-icon teal"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="num">~$60,509</div><div class="label">Inversión — 8 proyectos con ROI directo</div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+        <div><div class="num">~$180,299</div><div class="label">Utilidad neta anual estimada (sin validar)</div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-icon teal"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m5-4.13a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm6 4a4 4 0 0 0-8 0"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div><div class="num">~298%</div><div class="label">ROI promedio anual (8 proyectos)</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Sub-proyectos con ingreso propio y ROI directo</div>
+    <div class="cards" id="playa-cards">
+
+      <div class="card st-mid">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge teal"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20M6 12a6 4 0 0 0 12 0M6 12a6 4 0 0 1 12 0"/></svg></div>
+            <div><div class="card-title">Catamarán de fondo de vidrio</div><div class="card-client">Casco varado, requiere ingeniería marina</div></div>
+          </div>
+          <span class="badge mid">Casco identificado, sin evaluar</span>
+        </div>
+        <div class="roi-row"><span>Inversión: <strong>$2,000</strong></span><span>Utilidad anual (est.): <strong>$20,600</strong></span><span>ROI: <strong>~1,030%</strong></span><span>Payback: <strong>~0.1 años</strong></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:15%"></div></div>
+        <div class="bar-label">Avance estimado: 15%</div>
+        <div class="next-step"><strong>Próximo paso</strong>Evaluar el casco (grietas, óxido) antes de invertir y cotizar la ingeniería marina del panel de fondo de vidrio.</div>
+      </div>
+
+      <div class="card st-early">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20M5 8l7-6 7 6M5 8v13h14V8"/></svg></div>
+            <div><div class="card-title">Casa en el árbol</div><div class="card-client">Quick win — estructura en pie, deteriorada por intemperie</div></div>
+          </div>
+          <span class="badge early">Costo real confirmado</span>
+        </div>
+        <div class="roi-row"><span>Inversión: <strong>$2,509</strong></span><span>Utilidad anual (est.): <strong>$4,216</strong></span><span>ROI: <strong>~168%</strong></span><span>Payback: <strong>~0.6 años</strong></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:30%"></div></div>
+        <div class="bar-label">Avance estimado: 30%</div>
+        <div class="next-step"><strong>Próximo paso</strong>Inspección estructural del árbol y las uniones (seguridad) antes de reforzar escalera, techo y acabados.</div>
+      </div>
+
+      <div class="card st-early">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V11l7-5 7 5v10M9 21v-6h6v6"/></svg></div>
+            <div><div class="card-title">Cabañas</div><div class="card-client">Existentes frente al mar + 5 nuevas sobre el agua</div></div>
+          </div>
+          <span class="badge early">Existentes en buen estado</span>
+        </div>
+        <div class="roi-row"><span>Existente: <strong>$1,500</strong> → ROI ~468%</span><span>Nuevas (5 × $2,000): <strong>$10,000</strong> → ROI ~527% (escalado)</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:30%"></div></div>
+        <div class="bar-label">Avance estimado: 30% · confirmar si $2,000/unidad cubre construcción sobre el agua (pilotes, oleaje) — precio parece bajo para ese tipo de obra</div>
+        <div class="next-step"><strong>Próximo paso</strong>Limpieza/reparación de techo y pintura de la cabaña existente; evaluar factibilidad técnica (pilotes, resistencia al oleaje) antes de presupuestar las nuevas.</div>
+      </div>
+
+      <div class="card st-mid">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge cyan"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4.5 8-11a8 8 0 1 0-16 0c0 6.5 8 11 8 11z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></div>
+            <div><div class="card-title">Vivero Concepción</div><div class="card-client">Incluye palma enana · página web en construcción</div></div>
+          </div>
+          <span class="badge mid">Catálogo y sitio web en progreso</span>
+        </div>
+        <div class="roi-row"><span>Inversión: <strong>$15,000</strong></span><span>Utilidad anual (est.): <strong>$7,500</strong></span><span>ROI: <strong>~50%</strong></span><span>Payback: <strong>~2.0 años</strong></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:30%"></div></div>
+        <div class="bar-label">Avance estimado: 30% · meta de facturación ~$2,500/mes (recuperación en 24 meses)</div>
+        <div class="next-step"><strong>Próximo paso</strong>Confirmar precios de las 6 especies restantes, foto real de coco playero y el endpoint de Formspree antes de publicar el sitio.</div>
+      </div>
+
+      <div class="card st-early">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20M5 8l7-6 7 6M5 8v13h14V8"/></svg></div>
+            <div><div class="card-title">Ebanistería</div><div class="card-client">Antes "madera teca" — taller/negocio, no solo insumo interno</div></div>
+          </div>
+          <span class="badge early">Material en sitio, sin taller</span>
+        </div>
+        <div class="roi-row"><span>Inversión: <strong>$5,000</strong></span><span>Utilidad anual (est.): <strong>$6,000</strong></span><span>ROI: <strong>~120%</strong></span><span>Payback: <strong>~0.8 años</strong></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:20%"></div></div>
+        <div class="bar-label">Avance estimado: 20%</div>
+        <div class="next-step"><strong>Próximo paso</strong>Inventariar y curar la teca ya apilada, montar el taller y definir si se vende también a terceros.</div>
+      </div>
+
+      <div class="card st-early">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2C8 6 6 9 6 13a6 6 0 0 0 12 0c0-4-2-7-6-11z"/></svg></div>
+            <div><div class="card-title">Mantenimiento y Asesoría de Granjas</div><div class="card-client">Servicio nuevo para fincas de terceros (animales y plantas)</div></div>
+          </div>
+          <span class="badge early">Concepto sin catálogo definido</span>
+        </div>
+        <div class="roi-row"><span>Inversión: <strong>$4,500</strong></span><span>Utilidad anual (est.): <strong>$5,760</strong></span><span>ROI: <strong>~128%</strong></span><span>Payback: <strong>~0.8 años</strong></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%"></div></div>
+        <div class="bar-label">Avance estimado: 10%</div>
+        <div class="next-step"><strong>Próximo paso</strong>Definir catálogo de servicios y tarifas, e identificar clientes potenciales entre fincas vecinas.</div>
+      </div>
+
+      <div class="card st-early">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></svg></div>
+            <div><div class="card-title">Hotel</div><div class="card-client">3 pisos, ~15-18 habitaciones · incluye la piscina como amenidad propia</div></div>
+          </div>
+          <span class="badge early">Costo real confirmado — brechas sin resolver</span>
+        </div>
+        <div class="roi-row"><span>Inversión: <strong>$20,000</strong></span><span>Utilidad anual (est.): <strong>$76,500</strong></span><span>ROI: <strong>~383%</strong></span><span>Payback: <strong>~0.3 años</strong></span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:20%"></div></div>
+        <div class="bar-label">Avance estimado: 20% · falta confirmar si $20,000 cubre las 4 fases o solo una parte</div>
+        <div class="next-step"><strong>Próximo paso</strong>Resolver antes de iniciar obra: título/permiso municipal, registro ATP, tratamiento de aguas residuales, y sobre todo <strong>capital de trabajo</strong> (3-6 meses de nómina y lanzamiento) además del CAPEX.</div>
+      </div>
+
+    </div>
+    <div class="cards" style="margin-top:-28px;">
+      <div class="card" style="border-left-color:var(--sand); background:rgba(232,194,122,0.06);">
+        <div class="card-top">
+          <div class="card-heading"><div><div class="card-title" style="font-size:15px;">Subtotal — 8 proyectos con ingreso propio</div></div></div>
+        </div>
+        <div class="roi-row"><span>Inversión total: <strong>~$60,509</strong></span><span>Utilidad anual (est.): <strong>~$180,299</strong></span><span>ROI promedio: <strong>~298%</strong></span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Infraestructura y amenidad — sin ingreso propio directo</div>
+    <div class="cards" id="infra-cards">
+
+      <div class="card st-infra">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge cyan"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 19l6-12 4 8 3-5 3 9H4z"/></svg></div>
+            <div><div class="card-title">Construcción de carreteras</div><div class="card-client">~300 hectáreas, acceso a fincas y al mar</div></div>
+          </div>
+          <span class="badge infra">Maquinaria en sitio</span>
+        </div>
+        <div class="roi-row"><span>Inversión estimada: <strong>$80,000 – $250,000</strong> (muy preliminar)</span><span>Rol: habilita todo lo demás</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:20%"></div></div>
+        <div class="bar-label">Avance estimado: 20%</div>
+        <div class="next-step"><strong>Próximo paso</strong>Encargar estudio de ingeniería vial y priorizar el tramo que conecta con el mar y las fincas más activas.</div>
+      </div>
+
+      <div class="card st-infra">
+        <div class="card-top">
+          <div class="card-heading">
+            <div class="icon-badge cyan"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>
+            <div><div class="card-title">Mina de manganeso</div><div class="card-client">Viento Frío, Colón — piezas metálicas históricas</div></div>
+          </div>
+          <span class="badge infra">Piezas identificadas, sin catalogar</span>
+        </div>
+        <div class="roi-row"><span>Inversión estimada: <strong>$5,000 – $15,000</strong></span><span>Rol: atractivo turístico complementario</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%"></div></div>
+        <div class="bar-label">Avance estimado: 10%</div>
+        <div class="next-step"><strong>Próximo paso</strong>Documentar y catalogar las piezas antes de mover nada; evaluar ruta turística vs. venta como chatarra.</div>
+      </div>
+
+    </div>
+
+    <div class="section-title">Accesos rápidos</div>
+    <div class="links">
+      <a class="link-chip" href="Propiedades de la Playa - Presentacion.html">📊 Presentación completa</a>
+      <a class="link-chip" href="Vivero Concepcion - Sitio.html">🌱 Sitio del Vivero Concepción</a>
+    </div>
+
+    <footer>Propiedades de la Playa · Dashboard de seguimiento para Iván de la Guardia · <strong>Rene Becerra</strong>, Arquitecto de IA y Automatización de Procesos</footer>
+  </div>
+
+  <script>
+    // Misma API del bot de Telegram que alimenta Dashboard-CDP-Digital.html —
+    // aquí solo se lee el campo "playa" (nunca se mezcla con "projects"/"cdp").
+    const DASHBOARD_API_URL = "https://cdp-digital-dashboard-production.up.railway.app";
+
+    function isInfra(p) {
+      return (p.roi || "").includes("sin ROI propio");
+    }
+
+    function cardHtml(p) {
+      const roiLine = [];
+      if (p.investment) roiLine.push(`Inversión: <strong>${p.investment}</strong>`);
+      if (p.roi) roiLine.push(`ROI: <strong>${p.roi}</strong>`);
+      if (p.payback) roiLine.push(`Payback: <strong>${p.payback}</strong>`);
+      const cls = isInfra(p) ? "st-infra" : "st-mid";
+      const badgeCls = isInfra(p) ? "infra" : "mid";
+      return `
+      <div class="card ${cls}">
+        <div class="card-top">
+          <div class="card-heading">
+            <div><div class="card-title">${p.title}</div><div class="card-client">${p.client}</div></div>
+          </div>
+          <span class="badge ${badgeCls}">${p.badge}</span>
+        </div>
+        <div class="roi-row">${roiLine.map((l) => `<span>${l}</span>`).join("")}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${p.progress}%"></div></div>
+        <div class="bar-label">Avance estimado: ${p.progress}%</div>
+        <div class="next-step"><strong>Próximo paso</strong>${p.nextStep}</div>
+      </div>`;
+    }
+
+    function renderPlaya(playaProjects) {
+      const withRoi = playaProjects.filter((p) => !isInfra(p));
+      const infra = playaProjects.filter(isInfra);
+      document.getElementById("playa-cards").innerHTML = withRoi.map(cardHtml).join("");
+      document.getElementById("infra-cards").innerHTML = infra.map(cardHtml).join("");
+    }
+
+    async function loadLiveData() {
+      if (!DASHBOARD_API_URL) return;
+      try {
+        const res = await fetch(`${DASHBOARD_API_URL}/api/dashboard`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data.playa || !data.playa.length) throw new Error("Sin datos de playa en la API");
+
+        renderPlaya(data.playa);
+
+        const updated = new Date(data.updatedAt);
+        document.getElementById("subtitle").textContent =
+          "Vista única de los sub-proyectos de restauración y desarrollo en Playa/Colón — datos en vivo desde el bot de Telegram.";
+        document.getElementById("data-source").textContent =
+          `🟢 Conectado al bot · actualizado ${updated.toLocaleString("es-PA", { dateStyle: "long", timeStyle: "short" })}`;
+        document.getElementById("data-source").style.color = "var(--teal)";
+      } catch (err) {
+        document.getElementById("data-source").textContent =
+          "⚪ Sin conexión al bot — mostrando la última actualización manual del dashboard";
+        document.getElementById("data-source").style.color = "var(--text-3)";
+        console.warn("No se pudo cargar el dashboard en vivo:", err.message);
+      }
+    }
+
+    loadLiveData();
+  </script>
+</body>
+</html>
