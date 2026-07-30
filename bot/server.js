@@ -5,8 +5,8 @@ const cors = require("cors");
 const { getCategoryProjects, getMetrics } = require("./data");
 
 function publicProject({ project }) {
-  const { title, client, category, status, badge, progress, nextStep } = project;
-  return { title, client, category, status, badge, progress, nextStep };
+  const { title, client, category, status, badge, progress, nextStep, quote } = project;
+  return { title, client, category, status, badge, progress, nextStep, quote };
 }
 
 function startServer(port) {

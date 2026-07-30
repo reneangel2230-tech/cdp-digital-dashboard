@@ -73,6 +73,21 @@ function setFinancials(index, { investment, roi, payback }) {
   return project;
 }
 
+// quote: { title, items: [{qty, desc, unit, total}], note }. Una fila con
+// qty y unit vacíos se muestra en la tarjeta como fila de subtotal/total.
+function setQuote(index, quote) {
+  const projects = getProjects();
+  const project = projects[index];
+  if (!project) throw new Error("Proyecto no encontrado");
+  if (quote === null) {
+    delete project.quote;
+  } else {
+    project.quote = quote;
+  }
+  saveProjects(projects);
+  return project;
+}
+
 function setDates(index, { startDate, targetDate }) {
   const projects = getProjects();
   const project = projects[index];
@@ -146,6 +161,7 @@ module.exports = {
   updateProject,
   addProject,
   setFinancials,
+  setQuote,
   setDates,
   getInvestmentSummary,
   getTimeline,

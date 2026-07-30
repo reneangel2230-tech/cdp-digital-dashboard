@@ -49,6 +49,10 @@ npm start
   (ej. `/finanzas 8 | $154,000 | ~50%/año | ~2.0 años`)
 - `/fecha <número> <inicio:YYYY-MM-DD> <objetivo:YYYY-MM-DD>` — solo
   administradores; carga las fechas que muestra `/cronograma` para un proyecto
+- `/cotizacion <número>` — solo administradores; carga un desglose de
+  cotización (título, partidas y nota) que se muestra en `/proyecto` y en la
+  tarjeta del dashboard. Envía el comando solo con el número para ver el
+  formato de las líneas; `/cotizacion <número> borrar` la elimina
 
 El resto de comandos de administrador (`/nuevo`, `/nota`) aparecen en `/help`.
 
