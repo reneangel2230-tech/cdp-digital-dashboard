@@ -8,6 +8,7 @@ const {
   updateProject,
   addProject,
   setFinancials,
+  setQuote,
   setDates,
   getInvestmentSummary,
   getTimeline,
@@ -82,13 +83,14 @@ function progressBar(pct) {
 
 function formatProject(p, index) {
   const status = STATUS[p.status];
-  return (
+  let text =
     `${index}. ${status.emoji} *${p.title}*\n` +
     `   Cliente: ${p.client}\n` +
     `   Estado: ${p.badge}\n` +
     `   Avance: ${progressBar(p.progress)} ${p.progress}%\n` +
-    `   Próximo paso: ${p.nextStep}`
-  );
+    `   Próximo paso: ${p.nextStep}`;
+  if (p.quote) text += `\n\n${formatQuoteText(p.quote)}`;
+  return text;
 }
 
 function projectsKeyboard(pairs) {
@@ -185,6 +187,38 @@ function formatTimelineLine(project, index) {
   return `${index}. *${project.title}*\n   Cliente: ${project.client}\n   Inicio: ${start} · Objetivo: ${target}`;
 }
 
+function formatQuoteText(quote) {
+  const lines = quote.items.map((item) => {
+    const isTotal = !item.qty && !item.unit;
+    const total = item.total ? `$${item.total}` : "";
+    return isTotal ? `   *${item.desc}: ${total}*` : `   ${item.qty} × ${item.desc} — ${total}`;
+  });
+  let text = `📄 *${quote.title}*\n\n` + lines.join("\n");
+  if (quote.note) text += `\n\n_${quote.note}_`;
+  return text;
+}
+
+// Formato de /cotizacion (una línea de comando + cuerpo multilínea):
+//   /cotizacion <número>
+//   <título>
+//   <cant>|<descripción>|<precio unit>|<total>       (fila normal)
+//   |<descripción total>||<<total>                    (fila de subtotal/total, sin cant ni precio unit)
+//   ---                                                (separador opcional)
+//   <nota>
+function parseQuoteBody(bodyLines) {
+  const title = bodyLines[0];
+  const rest = bodyLines.slice(1);
+  const sepIdx = rest.indexOf("---");
+  const tableLines = sepIdx === -1 ? rest : rest.slice(0, sepIdx);
+  const note = sepIdx === -1 ? undefined : rest.slice(sepIdx + 1).join(" ").trim() || undefined;
+  if (!tableLines.length) return null;
+  const items = tableLines.map((line) => {
+    const [qty, desc, unit, total] = line.split("|").map((p) => (p !== undefined ? p.trim() : ""));
+    return { qty, desc: desc || "", unit, total };
+  });
+  return { title, items, note };
+}
+
 function cronogramaText(category) {
   const label = category === "playa" ? "Playa" : "CDP Digital";
   const timeline = getTimeline(category);
@@ -230,7 +264,8 @@ bot.help((ctx) =>
           "/nuevo Título | Cliente | avance | estado | próximo paso — crea un proyecto\n" +
           "/nota <número> <texto> — actualiza el próximo paso de un proyecto\n" +
           "/finanzas <número> | <inversión> | <ROI> | <payback opcional> — carga datos financieros (Playa)\n" +
-          "/fecha <número> <inicio:YYYY-MM-DD> <objetivo:YYYY-MM-DD> — carga fechas de un proyecto"
+          "/fecha <número> <inicio:YYYY-MM-DD> <objetivo:YYYY-MM-DD> — carga fechas de un proyecto\n" +
+          "/cotizacion <número> — carga un desglose de cotización (envía el comando solo para ver el formato)"
         : "")
   )
 );
@@ -472,6 +507,56 @@ bot.command("fecha", async (ctx) => {
 
   const project = setDates(idx, { startDate, targetDate });
   ctx.reply(`✅ Fechas actualizadas:\n\n${formatTimelineLine(project, idx + 1)}`, { parse_mode: "Markdown" });
+});
+
+const COTIZACION_USAGE =
+  "Uso:\n" +
+  "/cotizacion <número>\n" +
+  "<título>\n" +
+  "<cant>|<descripción>|<precio unit>|<total>\n" +
+  "... (una línea por partida)\n" +
+  "--- (opcional, separa la nota al pie)\n" +
+  "<nota>\n\n" +
+  "Para una fila de subtotal/total deja cant y precio unit vacíos: |Total Año 1||3594.60\n\n" +
+  "Ejemplo:\n" +
+  "/cotizacion 2\n" +
+  "Cotización interna — 20 equipos\n" +
+  "1|Licencia GAV Tracking 10 equipos, 1 año de manto|2798.37|2798.37\n" +
+  "10|Dispositivo extra (equipos 11–20), 1 año de manto|79.62|796.24\n" +
+  "|Total Año 1 (licencia + soporte)||3594.60\n" +
+  "---\n" +
+  "Fuente: cotización de Grupo GAV a CDP Digital.\n\n" +
+  "/cotizacion <número> borrar — elimina la cotización cargada.";
+
+bot.command("cotizacion", async (ctx) => {
+  if (!requireAdmin(ctx)) return;
+
+  const lines = ctx.message.text.split("\n");
+  const numStr = lines[0].split(" ")[1];
+  const projects = getProjects();
+  const idx = parseInt(numStr, 10) - 1;
+
+  if (!Number.isInteger(idx) || idx < 0 || idx >= projects.length) {
+    return ctx.reply(`${COTIZACION_USAGE}\n\n(número entre 1 y ${projects.length})`);
+  }
+
+  const body = lines.slice(1).map((l) => l.trim());
+  const bodyText = body.join(" ").trim().toLowerCase();
+  if (bodyText === "borrar" || bodyText === "eliminar") {
+    const project = setQuote(idx, null);
+    return ctx.reply(`✅ Cotización eliminada de *${project.title}*.`, { parse_mode: "Markdown" });
+  }
+
+  const nonEmptyBody = body.filter(Boolean);
+  const quote = nonEmptyBody.length ? parseQuoteBody(nonEmptyBody) : null;
+  if (!quote || !quote.items.length) {
+    return ctx.reply(COTIZACION_USAGE);
+  }
+
+  const project = setQuote(idx, quote);
+  ctx.reply(`✅ Cotización actualizada para *${project.title}*:\n\n${formatQuoteText(project.quote)}`, {
+    parse_mode: "Markdown",
+  });
 });
 
 bot.launch();

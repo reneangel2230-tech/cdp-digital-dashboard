@@ -15,7 +15,19 @@
     "status": "active",
     "badge": "Cotización enviada",
     "progress": 65,
-    "nextStep": "Confirmar que la cotización y el brochure, ya remitidos internamente, fueron entregados al cliente, y dar seguimiento a su respuesta."
+    "nextStep": "Confirmar que la cotización y el brochure, ya remitidos internamente, fueron entregados al cliente, y dar seguimiento a su respuesta.",
+    "quote": {
+      "title": "Cotización interna — 20 equipos",
+      "items": [
+        { "qty": "1", "desc": "Licencia GAV Tracking 10 equipos, 1 año de manto", "unit": "2798.37", "total": "2798.37" },
+        { "qty": "10", "desc": "Dispositivo extra (equipos 11–20), 1 año de manto", "unit": "79.62", "total": "796.24" },
+        { "qty": "", "desc": "Total Año 1 (licencia + soporte)", "unit": "", "total": "3594.60" },
+        { "qty": "2", "desc": "Manto adicional licencia 10 equipos (años 2–3)", "unit": "279.84/año", "total": "559.68" },
+        { "qty": "20", "desc": "Manto adicional dispositivo extra (años 2–3)", "unit": "7.97/año", "total": "191.23" },
+        { "qty": "", "desc": "Total 3 años (20 equipos)", "unit": "", "total": "4313.63" }
+      ],
+      "note": "Fuente: cotización de Grupo GAV a CDP Digital. Precios en USD; requiere certificación técnica del distribuidor."
+    }
   },
   {
     "title": "Convenio Marco — Arrendamiento de Impresoras",
